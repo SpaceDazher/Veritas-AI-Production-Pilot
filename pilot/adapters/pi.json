@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "adapterId": "pi-local",
+  "contractVersion": "1.0.0-draft",
+  "kind": "pi",
+  "availability": "MISSING",
+  "executableVersion": null,
+  "environmentDigest": null,
+  "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
+  "operations": [],
+  "blocker": "The pi executable is not installed or discoverable on the current host."
+}

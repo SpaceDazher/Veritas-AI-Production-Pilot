@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "S2-001-PILOT-AI-PRODUCTION-001",
+  "revision": 1,
+  "status": "BLOCKED_ENVIRONMENT",
+  "question": "How can an autonomous but human-governed system take an AI application from zero to a production-candidate release with reproducible decisions and measurable quality, safety, cost, latency and reliability?",
+  "targetOutcome": "A minimal adapter and one-job runner exercised by real Codex and pi adapters through IN_REVIEW, followed by a human decision.",
+  "dependency": {
+    "repository": "SpaceDazher/Veritas",
+    "pullRequest": 13,
+    "branch": "codex/s2-001-product-contract",
+    "commit": "0a55ee37cedd637231ff827b88be3726cedf5c09",
+    "draftVerdict": "PASS_WITH_LIMITS",
+    "acceptanceVerdict": "BLOCKED"
+  },
+  "constraints": {
+    "maxConcurrentJobs": 1,
+    "paidApiBudgetUsd": 0,
+    "modelAccess": "EXISTING_SUBSCRIPTION_OR_LOCAL_CLI_ONLY",
+    "database": "DEDICATED_LOCAL_POSTGRESQL",
+    "productionDeploymentAuthorized": false,
+    "privateSourceCommitAuthorized": false,
+    "agentFinalApprovalAuthorized": false
+  },
+  "requiredAdapters": ["codex", "pi", "generic-cli"],
+  "workflow": ["BACKLOG", "READY", "CLAIMED", "RUNNING", "IN_REVIEW"],
+  "humanDecisionOwner": "repository-owner",
+  "budgetOwner": "repository-owner",
+  "executionAuthorized": false,
+  "blockers": [
+    "pi CLI is not installed or discoverable on the current host",
+    "dedicated PostgreSQL and Docker/psql are not available on the current host",
+    "real adapter identities and executable versions have not been frozen",
+    "the exact public and local-only research sources have not been frozen by version and SHA-256"
+  ]
+}

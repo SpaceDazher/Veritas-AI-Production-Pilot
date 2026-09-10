@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "adapterId": "veritas-generic-cli",
+  "contractVersion": "1.0.0-draft",
+  "kind": "generic-cli",
+  "availability": "PLANNED",
+  "executableVersion": null,
+  "environmentDigest": null,
+  "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
+  "operations": [],
+  "blocker": "Implementation is the first pilot work item."
+}

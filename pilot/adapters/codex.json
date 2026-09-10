@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "adapterId": "codex-local",
+  "contractVersion": "1.0.0-draft",
+  "kind": "codex",
+  "availability": "AVAILABLE_UNVERIFIED",
+  "executableVersion": null,
+  "environmentDigest": null,
+  "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
+  "operations": ["discover"],
+  "blocker": "Identity, version and the full adapter behavior have not been verified in the pilot repository."
+}

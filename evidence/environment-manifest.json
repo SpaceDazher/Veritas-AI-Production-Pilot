@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "decisionInput": true,
+  "hostClass": "windows-local-development",
+  "node": {"available": true, "version": "22.23.2"},
+  "codex": {"available": true, "versionVerified": false},
+  "pi": {"available": false, "versionVerified": false},
+  "docker": {"available": false},
+  "psql": {"available": false},
+  "dedicatedPostgresql": {"available": false},
+  "paidApiBudgetUsd": 0,
+  "verdict": "BLOCKED_ENVIRONMENT"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "veritas-ai-production-pilot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/validate-pilot.mjs",
+    "verify": "node tests/validate-pilot.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

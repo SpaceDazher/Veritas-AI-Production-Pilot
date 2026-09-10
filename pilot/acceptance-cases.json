@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "status": "NOT_RUN",
+  "cases": [
+    {"id": "AC-01", "criterion": "Codex and pi expose manifests valid against the same frozen adapter contract", "status": "BLOCKED"},
+    {"id": "AC-02", "criterion": "The provider-neutral CLI implements every required operation and error", "status": "NOT_RUN"},
+    {"id": "AC-03", "criterion": "The runner permits exactly one active job", "status": "NOT_RUN"},
+    {"id": "AC-04", "criterion": "Canonical PostgreSQL state and append-only events replay to the same task state", "status": "BLOCKED"},
+    {"id": "AC-05", "criterion": "Every transition enforces expected revision, lease and fencing semantics", "status": "NOT_RUN"},
+    {"id": "AC-06", "criterion": "Unknown side-effect outcomes require reconciliation and cannot be blindly retried", "status": "NOT_RUN"},
+    {"id": "AC-07", "criterion": "Agents cannot write DONE or approve their own result", "status": "NOT_RUN"},
+    {"id": "AC-08", "criterion": "One real task reaches IN_REVIEW with complete artifacts and evidence", "status": "BLOCKED"},
+    {"id": "AC-09", "criterion": "Observed paid API cost is exactly USD 0", "status": "NOT_RUN"},
+    {"id": "AC-10", "criterion": "Failure, cancellation and restart preserve safety invariants", "status": "NOT_RUN"},
+    {"id": "AC-11", "criterion": "A clean checkout reproduces contract tests and the pilot verdict", "status": "NOT_RUN"},
+    {"id": "AC-12", "criterion": "A named human records the final approve, revise or reject decision", "status": "NOT_RUN"}
+  ]
+}

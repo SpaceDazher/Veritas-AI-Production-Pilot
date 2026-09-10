@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veritas.local/contracts/adapter-manifest.schema.json",
+  "title": "Veritas agent adapter manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "adapterId",
+    "contractVersion",
+    "kind",
+    "availability",
+    "authority",
+    "operations"
+  ],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "adapterId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,63}$"},
+    "contractVersion": {"const": "1.0.0-draft"},
+    "kind": {"enum": ["codex", "pi", "generic-cli"]},
+    "availability": {"enum": ["AVAILABLE_UNVERIFIED", "MISSING", "PLANNED", "VERIFIED"]},
+    "executableVersion": {"type": ["string", "null"]},
+    "environmentDigest": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+    "authority": {"const": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY"},
+    "operations": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": ["discover", "claim", "start", "heartbeat", "checkpoint", "submit-for-review", "fail", "cancel"]
+      }
+    },
+    "blocker": {"type": ["string", "null"]}
+  }
+}
