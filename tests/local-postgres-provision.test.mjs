@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { PROVISIONING_CONTRACT, buildChildEnvironment, runtimeRecordIsValid } from '../scripts/provision-local-postgres.mjs';
+import { PROVISIONING_CONTRACT, buildChildEnvironment, computeMigrationSetSha256, runtimeRecordIsValid } from '../scripts/provision-local-postgres.mjs';
 import { LIFECYCLE_ACTIONS, buildLifecycleInvocation, buildLifecycleSpawnOptions } from '../scripts/postgres-lifecycle.mjs';
 
 test('local PostgreSQL provisioning is bounded and non-production', () => {
@@ -11,6 +11,7 @@ test('local PostgreSQL provisioning is bounded and non-production', () => {
   assert.equal(PROVISIONING_CONTRACT.authentication, 'scram-sha-256');
   assert.equal(PROVISIONING_CONTRACT.systemService, false);
   assert.match(PROVISIONING_CONTRACT.archiveSha256, /^[A-F0-9]{64}$/);
+  assert.match(computeMigrationSetSha256(), /^[a-f0-9]{64}$/);
 });
 
 test('runtime record validation is content-bound and rejects missing proof', () => {

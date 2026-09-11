@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "decisionInput": true,
+  "verdict": "PASS",
+  "taskId": "S2-001-PERSISTENT-COMMAND-PROBE-v1",
+  "status": "IN_REVIEW",
+  "revision": 6,
+  "eventCount": 6,
+  "chainLinked": true,
+  "firstEventHash": "642e957c5b24b092c38f8043c050dc73114040feac8bc57f545d0526dd3686ac",
+  "lastEventHash": "f7f6a89ece3df2a0c26178a957b5eef3e21db24e0f2e0c97411d584fdc36ba58",
+  "migrationSha256": "cad2c0fd409bc1509acbf32d957a0778c4c3602b0e444723ddc18fa93fc50e50",
+  "databaseBinding": "127.0.0.1:55432/veritas_pilot",
+  "modelExecuted": false,
+  "evidenceDigest": "9e67a4335819fc57cf266a65fd294f9a1f15e703869f19efbe3d7728f43d6eb2"
+}

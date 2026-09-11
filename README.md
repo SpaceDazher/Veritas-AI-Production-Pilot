@@ -5,12 +5,12 @@ production-candidate evidence pack. The pilot is intentionally fail-closed:
 agents may implement and recommend, while a human owns budget and final
 approval.
 
-Current status: **BLOCKED_PREREQUISITES**. The local host has Codex `0.153.4`,
+Current status: **READY_FOR_EXECUTION**. The local host has Codex `0.153.4`,
 Pi `0.85.1`, Node.js `22.23.2`, and a verified project-local PostgreSQL `17.11`
 database on loopback. Provider authentication/task execution and the exact
 source freeze are verified. A two-process, authority-free transport smoke has
-run through real Codex and Pi CLIs. The persistent PostgreSQL task lifecycle is
-still incomplete; no end-to-end pilot run or production deployment is claimed.
+run through real Codex and Pi CLIs. An idempotent PostgreSQL probe reached
+`IN_REVIEW`; the real Codex/Pi task and production deployment remain unexecuted.
 
 ## Implemented reference slice
 
@@ -27,13 +27,15 @@ npm run verify:sources
 npm run probe:execution
 npm run postgres:start
 npm run postgres:status
+npm run postgres:migrate
+npm run probe:postgres-command
 npm run postgres:stop
 ```
 
-The in-memory engine is a test oracle, not the durable runtime. State-changing
-CLI operations remain fail-closed until the persistent command path is
-available and the real task reaches `IN_REVIEW`. Evidence-pack publication and
-a human pilot decision are later steps.
+The in-memory engine is a test oracle. State-changing CLI operations now use
+the project-local PostgreSQL command path and repository-local JSON inputs;
+every mutation is revision-, lease-, fence-, capability- and idempotency-bound.
+The real task, evidence pack and human decision are later steps.
 
 `npm run probe:environment` performs bounded `--version` discovery only. It
 does not invoke a model. The first PostgreSQL schema is frozen in

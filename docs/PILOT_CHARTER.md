@@ -36,10 +36,11 @@ production-like local result is not a production certification.
 
 ## Current disposition
 
-`BLOCKED_PREREQUISITES`: Codex, Pi, Node.js and a dedicated loopback-only
+`READY_FOR_EXECUTION`: Codex, Pi, Node.js and a dedicated loopback-only
 PostgreSQL database are present and version-verified. Codex subscription and Pi
 provider authentication are verified. Five primary public sources are frozen
 as tracked SHA-256-bound snapshots and local-only inputs are explicitly empty.
 A bounded transport smoke ran through both real agent processes without tools
-or authority claims. The persistent PostgreSQL task lifecycle remains
-incomplete. This repository does not claim that the end-to-end pilot has run.
+or authority claims. An idempotent DB-only probe verified the persistent
+PostgreSQL path through `IN_REVIEW`; it did not execute a model. The real
+Codex/Pi task remains unexecuted, so the end-to-end pilot is not yet claimed.

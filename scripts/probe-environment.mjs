@@ -5,12 +5,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { buildEnvironmentObservation } from '../src/environment-probe.mjs';
-import { buildChildEnvironment, runtimeRecordIsValid } from './provision-local-postgres.mjs';
+import { buildChildEnvironment, computeMigrationSetSha256, runtimeRecordIsValid } from './provision-local-postgres.mjs';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const localPsql = path.join(projectRoot, '.local', 'postgresql17', 'pgsql', 'bin', 'psql.exe');
 const runtimePath = path.join(projectRoot, '.local', 'postgres-runtime.json');
-const migrationPath = path.join(projectRoot, 'migrations', '001_control_plane.sql');
 
 const run = (executable, args) => {
   const useNpmPi = process.platform === 'win32' && executable === 'pi' && process.env.APPDATA;
@@ -30,7 +29,7 @@ const run = (executable, args) => {
 const databaseProbe = () => {
   if (!fs.existsSync(runtimePath) || !fs.existsSync(localPsql)) return { status: 1, stdout: '', migrationSha256: null };
   const runtime = JSON.parse(fs.readFileSync(runtimePath, 'utf8'));
-  const migrationSha256 = createHash('sha256').update(fs.readFileSync(migrationPath)).digest('hex');
+  const migrationSha256 = computeMigrationSetSha256();
   if (!runtimeRecordIsValid(runtime) || runtime.migrationSha256 !== migrationSha256) {
     return { status: 1, stdout: '', migrationSha256: null };
   }

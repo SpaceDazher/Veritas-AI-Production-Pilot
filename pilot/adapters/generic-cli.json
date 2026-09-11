@@ -3,10 +3,10 @@
   "adapterId": "veritas-generic-cli",
   "contractVersion": "1.0.0-draft",
   "kind": "generic-cli",
-  "availability": "AVAILABLE_UNVERIFIED",
+  "availability": "VERIFIED",
   "executableVersion": "0.1.0",
-  "environmentDigest": "8361bf276f0bc879e04939c2461658a56ad062723c49e007ac617c0207209850",
+  "environmentDigest": "2a2740c29538202f4abeaf5c5836795d2063aec64f79f94c86b67fbcab41ab1d",
   "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
-  "operations": ["discover"],
-  "blocker": "Discovery and the PostgreSQL schema are verified; the persistent command implementation is not yet connected."
+  "operations": ["discover", "claim", "start", "heartbeat", "checkpoint", "submit-for-review", "fail", "cancel"],
+  "blocker": null
 }

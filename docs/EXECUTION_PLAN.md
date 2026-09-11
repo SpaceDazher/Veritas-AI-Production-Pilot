@@ -14,8 +14,9 @@ authentication are verified without emitting credentials or invoking a model.
 Five primary public sources are frozen as tracked SHA-256-bound snapshots;
 local-only inputs are explicitly empty. A bounded, authority-free transport
 smoke has executed successfully through real Codex and Pi processes, with
-separate PIDs and no raw transcripts committed. Persistent task lifecycle
-execution through PostgreSQL remains open, so completion remains fail-closed.
+separate PIDs and no raw transcripts committed. An idempotent DB-only probe has
+exercised the persistent PostgreSQL command path through `IN_REVIEW`, with six
+linked audit events. The real Codex/Pi task remains open.
 
 ## Phase 1 — contract tests
 
@@ -26,7 +27,7 @@ expansion fail closed.
 
 ## Phase 2 — generic CLI
 
-Implement the provider-neutral commands `discover`, `claim`, `start`,
+Implemented: the provider-neutral commands `discover`, `claim`, `start`,
 `heartbeat`, `checkpoint`, `submit-for-review`, `fail`, and `cancel`. The CLI
 must emit structured JSON and never parse human prose as authority.
 
@@ -38,7 +39,8 @@ digest. A missing or inconsistent capability blocks scheduling.
 
 ## Phase 4 — one-job runner
 
-Persist canonical task/run/event state in PostgreSQL. Claim atomically, enforce
+Implemented for the bounded command path: persist canonical task/lease/
+operation/event state in PostgreSQL. Claim atomically, enforce
 one active lease, use database time, and reject stale fencing tokens. Unknown
 side-effect outcomes enter reconciliation.
 

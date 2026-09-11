@@ -45,7 +45,22 @@ const binaryRoot = path.join(distributionRoot, 'bin');
 const dataRoot = path.join(localRoot, 'pgdata');
 const runtimePath = path.join(localRoot, 'postgres-runtime.json');
 const logPath = path.join(localRoot, 'postgres.log');
-const migrationPath = path.join(projectRoot, 'migrations', '001_control_plane.sql');
+const migrationsRoot = path.join(projectRoot, 'migrations');
+const migrationPaths = () => fs.readdirSync(migrationsRoot)
+  .filter((name) => /^\d+_[a-z0-9_-]+\.sql$/i.test(name))
+  .sort()
+  .map((name) => path.join(migrationsRoot, name));
+
+export const computeMigrationSetSha256 = () => {
+  const hash = createHash('sha256');
+  for (const migration of migrationPaths()) {
+    hash.update(path.basename(migration));
+    hash.update('\0');
+    hash.update(fs.readFileSync(migration));
+    hash.update('\0');
+  }
+  return hash.digest('hex');
+};
 
 const executable = (name) => path.join(binaryRoot, `${name}.exe`);
 const randomPassword = () => randomBytes(32).toString('base64url');
@@ -120,11 +135,13 @@ export const provisionLocalPostgres = () => {
       '--host', PROVISIONING_CONTRACT.host, '--port', String(PROVISIONING_CONTRACT.port),
       '--username', 'veritas_admin', '--owner', 'veritas_app', 'veritas_pilot',
     ], { PGPASSWORD: adminPassword });
-    run(executable('psql'), [
-      '--host', PROVISIONING_CONTRACT.host, '--port', String(PROVISIONING_CONTRACT.port),
-      '--username', 'veritas_app', '--dbname', 'veritas_pilot', '--set', 'ON_ERROR_STOP=1',
-      '--file', migrationPath,
-    ], { PGPASSWORD: applicationPassword });
+    for (const migrationPath of migrationPaths()) {
+      run(executable('psql'), [
+        '--host', PROVISIONING_CONTRACT.host, '--port', String(PROVISIONING_CONTRACT.port),
+        '--username', 'veritas_app', '--dbname', 'veritas_pilot', '--set', 'ON_ERROR_STOP=1',
+        '--file', migrationPath,
+      ], { PGPASSWORD: applicationPassword });
+    }
 
     const proof = run(executable('psql'), [
       '--host', PROVISIONING_CONTRACT.host, '--port', String(PROVISIONING_CONTRACT.port),
@@ -132,7 +149,7 @@ export const provisionLocalPostgres = () => {
       '--command', "SELECT current_setting('server_version') || '|' || current_database() || '|' || current_user || '|' || (SELECT count(*) FROM information_schema.tables WHERE table_schema='public');",
     ], { PGPASSWORD: applicationPassword });
     const [serverVersion, database, applicationRole, tableCountText] = proof.split('|');
-    const migrationSha256 = createHash('sha256').update(fs.readFileSync(migrationPath)).digest('hex');
+    const migrationSha256 = computeMigrationSetSha256();
     const record = {
       schemaVersion: 1,
       host: PROVISIONING_CONTRACT.host,

@@ -86,5 +86,14 @@ test('frozen adapter manifests distinguish verified transport from pending task 
     assert.match(adapter.blocker, /task lifecycle/i);
   }
   assert.equal(brief.executionAuthorized, true);
-  assert.deepEqual(brief.blockers, ['persistent PostgreSQL CLI and real Codex/Pi task lifecycle through IN_REVIEW have not been executed']);
+  assert.equal(brief.status, 'READY_FOR_EXECUTION');
+  assert.deepEqual(brief.blockers, []);
+});
+
+test('adapter manifest schema represents frozen auth and execution bindings', () => {
+  const schema = JSON.parse(readFileSync(new URL('../contracts/adapter-manifest.schema.json', import.meta.url), 'utf8'));
+  assert(schema.properties.availability.enum.includes('TRANSPORT_VERIFIED_TASK_LIFECYCLE_PENDING'));
+  assert(schema.properties.availability.enum.includes('VERIFIED'));
+  assert.equal(schema.properties.authBinding.type, 'object');
+  assert.equal(schema.properties.executionBinding.properties.digest.pattern, '^[a-f0-9]{64}$');
 });

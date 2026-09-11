@@ -20,7 +20,7 @@ const agentExecution = read('evidence/agent-execution-manifest.json');
 const sourceManifest = read('pilot/source-selection-manifest.json');
 const adapters = ['codex', 'pi', 'generic-cli'].map((name) => read(`pilot/adapters/${name}.json`));
 
-assert.equal(brief.status, 'BLOCKED_PREREQUISITES');
+assert.equal(brief.status, 'READY_FOR_EXECUTION');
 assert.equal(brief.executionAuthorized, true);
 assert.equal(brief.constraints.maxConcurrentJobs, 1);
 assert.equal(brief.constraints.paidApiBudgetUsd, 0);
@@ -80,7 +80,7 @@ for (const file of walk(root)) {
 }
 
 const evidence = {
-  verdict: 'PASS_CONTRACT_BLOCKED_EXECUTION',
+  verdict: 'PASS_CONTRACT_READY_EXECUTION',
   assertions: 41,
   taskBriefSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'pilot/task-brief.json'))).digest('hex'),
   adapterContractSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'contracts/adapter-contract.json'))).digest('hex'),
