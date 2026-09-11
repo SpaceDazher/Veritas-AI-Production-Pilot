@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node tests/validate-pilot.mjs",
-    "verify": "node tests/validate-pilot.mjs"
+    "test": "node tests/validate-pilot.mjs && node --test tests/*.test.mjs",
+    "verify": "npm test",
+    "discovery": "node bin/veritas-pilot.mjs discover"
   },
   "engines": {
     "node": ">=22"
