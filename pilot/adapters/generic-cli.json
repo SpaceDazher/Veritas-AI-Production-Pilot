@@ -5,7 +5,7 @@
   "kind": "generic-cli",
   "availability": "AVAILABLE_UNVERIFIED",
   "executableVersion": "0.1.0",
-  "environmentDigest": "c10aeadb56d55f6bb4789cf9c2ff87c290818210957b43116c3fb0730740249b",
+  "environmentDigest": "8f89a19dcf6ba4d87aa01d011c1a4244b1bea19df18afb9b9076f6cf00bbb933",
   "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
   "operations": ["discover"],
   "blocker": "Discovery is verified; state-changing operations remain blocked until the durable PostgreSQL path is live."

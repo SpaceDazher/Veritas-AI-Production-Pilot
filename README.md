@@ -5,9 +5,9 @@ production-candidate evidence pack. The pilot is intentionally fail-closed:
 agents may implement and recommend, while a human owns budget and final
 approval.
 
-Current status: **BLOCKED_ENVIRONMENT**. The local host has Codex and Node.js,
-but no `pi` CLI and no dedicated PostgreSQL/Docker runtime. No real pilot run
-or production deployment is claimed.
+Current status: **BLOCKED_ENVIRONMENT**. The local host has Codex `0.153.4`, Pi
+`0.85.1`, and Node.js `22.23.2`, but no dedicated PostgreSQL/Docker runtime.
+No real pilot run or production deployment is claimed.
 
 ## Implemented reference slice
 

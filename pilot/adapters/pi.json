@@ -3,10 +3,10 @@
   "adapterId": "pi-local",
   "contractVersion": "1.0.0-draft",
   "kind": "pi",
-  "availability": "MISSING",
-  "executableVersion": null,
-  "environmentDigest": null,
+  "availability": "AVAILABLE_UNVERIFIED",
+  "executableVersion": "0.85.1",
+  "environmentDigest": "8f89a19dcf6ba4d87aa01d011c1a4244b1bea19df18afb9b9076f6cf00bbb933",
   "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
-  "operations": [],
-  "blocker": "The pi executable is not installed or discoverable on the current host."
+  "operations": ["discover"],
+  "blocker": "Executable version is verified, but provider authentication and task execution have not been verified through the pilot contract."
 }

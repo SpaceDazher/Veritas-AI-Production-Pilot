@@ -29,7 +29,8 @@ assert.equal(cases.status, 'NOT_RUN');
 assert.equal(cases.cases.length, 12);
 assert.equal(new Set(cases.cases.map((item) => item.id)).size, cases.cases.length);
 assert(cases.cases.every((item) => item.status !== 'PASS'));
-assert.equal(environment.pi.available, false);
+assert.equal(environment.pi.available, true);
+assert.equal(environment.pi.versionVerified, true);
 assert.equal(environment.dedicatedPostgresql.available, false);
 assert.equal(environment.verdict, 'BLOCKED_ENVIRONMENT');
 assert.deepEqual(adapters.map((adapter) => adapter.kind), ['codex', 'pi', 'generic-cli']);
@@ -57,7 +58,7 @@ for (const file of walk(root)) {
 
 const evidence = {
   verdict: 'PASS_CONTRACT_BLOCKED_EXECUTION',
-  assertions: 24,
+  assertions: 25,
   taskBriefSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'pilot/task-brief.json'))).digest('hex'),
   adapterContractSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'contracts/adapter-contract.json'))).digest('hex'),
   limitations: brief.blockers,

@@ -28,9 +28,8 @@
   "budgetOwner": "repository-owner",
   "executionAuthorized": false,
   "blockers": [
-    "pi CLI is not installed or discoverable on the current host",
     "dedicated PostgreSQL and Docker/psql are not available on the current host",
-    "pi identity/version and real Codex/pi task-execution bindings have not been frozen",
+    "Pi provider identity/authentication and real Codex/pi task-execution bindings have not been frozen",
     "the exact public and local-only research sources have not been frozen by version and SHA-256"
   ]
 }

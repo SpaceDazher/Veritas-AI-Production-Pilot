@@ -17,7 +17,7 @@ test('discovery is machine-readable and honestly reports blockers', () => {
   assert.equal(output.contractVersion, '1.0.0-draft');
   assert.equal(output.executionEnabled, false);
   assert.equal(output.maxConcurrentJobs, 1);
-  assert.deepEqual(output.missingPrerequisites.sort(), ['dedicated-postgresql', 'pi-cli']);
+  assert.deepEqual(output.missingPrerequisites, ['dedicated-postgresql']);
 });
 
 test('state-changing CLI commands fail closed while prerequisites are missing', () => {
