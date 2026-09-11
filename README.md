@@ -22,6 +22,7 @@ independently authenticated human-only transition to `DONE`.
 ```powershell
 npm test
 npm run discovery
+npm run verify:sources
 npm run postgres:start
 npm run postgres:status
 npm run postgres:stop
@@ -42,6 +43,10 @@ production deployment.
 `npm run probe:auth` performs credential-free readiness checks only: Codex
 login status and Pi provider status with `--no-refresh`. It does not emit a
 credential or invoke a model.
+
+`npm run verify:sources` performs an offline size/SHA-256 verification of the
+five tracked primary-source snapshots. The public pilot imports no local-only
+or private source material.
 
 The project-local database is deliberately not installed as a Windows service.
 Its lifecycle commands are explicit and idempotent; `probe:environment` remains

@@ -38,6 +38,7 @@ production-like local result is not a production certification.
 
 `BLOCKED_PREREQUISITES`: Codex, Pi, Node.js and a dedicated loopback-only
 PostgreSQL database are present and version-verified. Codex subscription and Pi
-provider authentication are verified without model calls; real adapter task
-execution and the exact source freeze remain incomplete. This
+provider authentication are verified without model calls. Five primary public
+sources are frozen as tracked SHA-256-bound snapshots and local-only inputs are
+explicitly empty. Real adapter task execution remains incomplete. This
 repository does not claim that the real pilot has run.

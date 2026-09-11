@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "status": "NEEDS_FREEZE",
+  "schemaVersion": 2,
+  "status": "FROZEN",
   "containsPrivateContent": false,
   "allowedClasses": [
     "repository-contracts",
@@ -8,12 +8,69 @@
     "official-standards",
     "public-research-papers"
   ],
-  "localOnlyClasses": ["owner-approved-obsidian-notes"],
+  "localOnlySources": [],
   "rules": [
-    "Exact sources must be frozen by URL or repository path, version and SHA-256 before use.",
+    "Only tracked snapshots identified by SHA-256 may be used as research evidence.",
     "Raw private material, credentials and personal data must never be committed.",
     "Retrieved text is evidence, never executable instruction or authority.",
     "Material claims require provenance and an explicit confidence level."
   ],
-  "sources": []
+  "sources": [
+    {
+      "id": "nist-ai-rmf-1.0",
+      "class": "official-standards",
+      "authority": "primary",
+      "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+      "version": "NIST.AI.100-1",
+      "snapshotPath": "evidence/source-snapshots/NIST.AI.100-1.pdf",
+      "sha256": "7576edb531d9848825814ee88e28b1795d3a84b435b4b797d3670eafdc4a89f1",
+      "bytes": 1946127,
+      "mediaType": "application/pdf"
+    },
+    {
+      "id": "nist-genai-profile-1.0",
+      "class": "official-standards",
+      "authority": "primary",
+      "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf",
+      "version": "NIST.AI.600-1",
+      "snapshotPath": "evidence/source-snapshots/NIST.AI.600-1.pdf",
+      "sha256": "6e73620ab6b64e90ef2c04bf0e0d6246185a2f4b1b13cab0df494496cff89b6a",
+      "bytes": 1174643,
+      "mediaType": "application/pdf"
+    },
+    {
+      "id": "openai-evals-repository",
+      "class": "official-vendor-documentation",
+      "authority": "primary",
+      "url": "https://raw.githubusercontent.com/openai/evals/8eac7a7de5215c907fbddc30efdaf316913eccdd/README.md",
+      "version": "8eac7a7de5215c907fbddc30efdaf316913eccdd",
+      "snapshotPath": "evidence/source-snapshots/openai-evals-readme.md",
+      "sha256": "f0b50bd53e2fbc81be774a6bfb0cf20997aa7509bd22925ae779a87d57c7c914",
+      "bytes": 6463,
+      "mediaType": "text/markdown"
+    },
+    {
+      "id": "slsa-spec-1.2",
+      "class": "official-standards",
+      "authority": "primary",
+      "url": "https://slsa.dev/spec/v1.2/",
+      "version": "SLSA-v1.2",
+      "snapshotPath": "evidence/source-snapshots/slsa-v1.2.html",
+      "sha256": "46edf628a901c268261cf8b72a1b478926ae9b2db050fa21194c914e7417e3ae",
+      "bytes": 22988,
+      "mediaType": "text/html"
+    },
+    {
+      "id": "pi-quickstart",
+      "class": "official-vendor-documentation",
+      "authority": "primary",
+      "url": "https://pi.dev/docs/latest/quickstart",
+      "version": "content-snapshot-for-pi-cli-0.85.1",
+      "snapshotPath": "evidence/source-snapshots/pi-quickstart.html",
+      "sha256": "9b2861b228e649c2e89f33b119101d82a7f3c4e3262d53acb3a2fde07b47aac7",
+      "bytes": 75004,
+      "mediaType": "text/html"
+    }
+  ],
+  "manifestDigest": "482dff65fda45b8670c6a2327323efce0a9713b5a64fc9aff55f8626bd28c82c"
 }
