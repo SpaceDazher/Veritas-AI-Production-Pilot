@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "decisionInput": true,
+  "codex": {
+    "status": "ready",
+    "authMode": "chatgpt-subscription"
+  },
+  "pi": {
+    "status": "ready",
+    "provider": "zai-coding-cn",
+    "authType": "api_key"
+  },
+  "modelCallsExecuted": 0,
+  "credentialsEmitted": false,
+  "verdict": "AUTH_READY_EXECUTION_UNVERIFIED",
+  "authDigest": "41800ddf29c22dce98318a4661d9f86a91fafb6ae3b22a6aaadbf651a7f6898d"
+}

@@ -3,10 +3,11 @@
   "adapterId": "codex-local",
   "contractVersion": "1.0.0-draft",
   "kind": "codex",
-  "availability": "AVAILABLE_UNVERIFIED",
+  "availability": "AUTH_READY_EXECUTION_UNVERIFIED",
   "executableVersion": "codex-cli 0.153.4",
   "environmentDigest": "8361bf276f0bc879e04939c2461658a56ad062723c49e007ac617c0207209850",
   "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
   "operations": ["discover"],
-  "blocker": "Executable version is verified, but identity and task execution have not been verified through the pilot contract."
+  "authBinding": {"status": "ready", "authMode": "chatgpt-subscription", "manifest": "evidence/agent-auth-manifest.json"},
+  "blocker": "Executable version and subscription authentication are verified, but task execution has not been verified through the pilot contract."
 }

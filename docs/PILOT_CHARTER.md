@@ -37,6 +37,7 @@ production-like local result is not a production certification.
 ## Current disposition
 
 `BLOCKED_PREREQUISITES`: Codex, Pi, Node.js and a dedicated loopback-only
-PostgreSQL database are present and version-verified. Provider authentication,
-real adapter task execution and the exact source freeze remain incomplete. This
+PostgreSQL database are present and version-verified. Codex subscription and Pi
+provider authentication are verified without model calls; real adapter task
+execution and the exact source freeze remain incomplete. This
 repository does not claim that the real pilot has run.

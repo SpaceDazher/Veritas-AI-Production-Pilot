@@ -28,7 +28,7 @@
   "budgetOwner": "repository-owner",
   "executionAuthorized": false,
   "blockers": [
-    "Pi provider identity/authentication and real Codex/pi task-execution bindings have not been frozen",
+    "real Codex/pi task-execution bindings have not been frozen",
     "the exact public and local-only research sources have not been frozen by version and SHA-256"
   ]
 }

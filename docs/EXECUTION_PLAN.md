@@ -9,9 +9,10 @@
 
 Observed local status: Pi `0.85.1`, Codex `0.153.4`, Node `22.23.2`, and a
 loopback-only PostgreSQL `17.11` database are version-verified. The database
-migration has been applied. Provider authentication, real task-execution
-bindings, and the exact source freeze are still open, so execution remains
-fail-closed.
+migration has been applied. Codex subscription and Pi `zai-coding-cn`
+authentication are verified without emitting credentials or invoking a model.
+Real task-execution bindings and the exact source freeze are still open, so
+execution remains fail-closed.
 
 ## Phase 1 — contract tests
 

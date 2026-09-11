@@ -39,6 +39,10 @@ does not invoke a model. The first PostgreSQL schema is frozen in
 project-local PostgreSQL server. The server is a test dependency, not a
 production deployment.
 
+`npm run probe:auth` performs credential-free readiness checks only: Codex
+login status and Pi provider status with `--no-refresh`. It does not emit a
+credential or invoke a model.
+
 The project-local database is deliberately not installed as a Windows service.
 Its lifecycle commands are explicit and idempotent; `probe:environment` remains
 read-only and reports a stopped database as unavailable.

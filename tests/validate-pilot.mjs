@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { verifyAgentAuthDigest } from '../src/agent-auth-probe.mjs';
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (relative) => JSON.parse(fs.readFileSync(path.join(root, relative), 'utf8'));
 
@@ -11,6 +13,7 @@ const brief = read('pilot/task-brief.json');
 const contract = read('contracts/adapter-contract.json');
 const cases = read('pilot/acceptance-cases.json');
 const environment = read('evidence/environment-manifest.json');
+const agentAuth = read('evidence/agent-auth-manifest.json');
 const adapters = ['codex', 'pi', 'generic-cli'].map((name) => read(`pilot/adapters/${name}.json`));
 
 assert.equal(brief.status, 'BLOCKED_PREREQUISITES');
@@ -34,7 +37,12 @@ assert.equal(environment.pi.versionVerified, true);
 assert.equal(environment.dedicatedPostgresql.available, true);
 assert.equal(environment.dedicatedPostgresql.verified, true);
 assert.equal(environment.verdict, 'READY_FOR_AUTHORIZATION');
+assert.equal(agentAuth.verdict, 'AUTH_READY_EXECUTION_UNVERIFIED');
+assert.equal(agentAuth.modelCallsExecuted, 0);
+assert.equal(agentAuth.credentialsEmitted, false);
+assert.equal(verifyAgentAuthDigest(agentAuth), true);
 assert.deepEqual(adapters.map((adapter) => adapter.kind), ['codex', 'pi', 'generic-cli']);
+assert.deepEqual(adapters.slice(0, 2).map((adapter) => adapter.availability), ['AUTH_READY_EXECUTION_UNVERIFIED', 'AUTH_READY_EXECUTION_UNVERIFIED']);
 assert(adapters.every((adapter) => adapter.authority === 'IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY'));
 assert(adapters.every((adapter) => adapter.contractVersion === contract.contractVersion));
 
@@ -59,7 +67,7 @@ for (const file of walk(root)) {
 
 const evidence = {
   verdict: 'PASS_CONTRACT_BLOCKED_EXECUTION',
-  assertions: 26,
+  assertions: 31,
   taskBriefSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'pilot/task-brief.json'))).digest('hex'),
   adapterContractSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'contracts/adapter-contract.json'))).digest('hex'),
   limitations: brief.blockers,

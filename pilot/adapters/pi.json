@@ -3,10 +3,11 @@
   "adapterId": "pi-local",
   "contractVersion": "1.0.0-draft",
   "kind": "pi",
-  "availability": "AVAILABLE_UNVERIFIED",
+  "availability": "AUTH_READY_EXECUTION_UNVERIFIED",
   "executableVersion": "0.85.1",
   "environmentDigest": "8361bf276f0bc879e04939c2461658a56ad062723c49e007ac617c0207209850",
   "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
   "operations": ["discover"],
-  "blocker": "Executable version is verified, but provider authentication and task execution have not been verified through the pilot contract."
+  "authBinding": {"status": "ready", "provider": "zai-coding-cn", "authType": "api_key", "manifest": "evidence/agent-auth-manifest.json"},
+  "blocker": "Executable version and provider authentication are verified, but task execution has not been verified through the pilot contract."
 }
