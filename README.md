@@ -28,5 +28,10 @@ required Codex/pi/generic adapters are available and frozen. PostgreSQL storage,
 real adapter execution, evidence-pack publication, and a human pilot decision
 are the next implementation steps.
 
+`npm run probe:environment` performs bounded `--version` discovery only. It
+does not invoke a model. The first PostgreSQL schema is frozen in
+`migrations/001_control_plane.sql`; it is contract-tested but remains unverified
+against a live server on this host.
+
 See [the pilot charter](docs/PILOT_CHARTER.md), [execution plan](docs/EXECUTION_PLAN.md),
 and the machine-readable [task brief](pilot/task-brief.json).

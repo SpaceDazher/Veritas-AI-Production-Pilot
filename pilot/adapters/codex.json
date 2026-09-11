@@ -4,9 +4,9 @@
   "contractVersion": "1.0.0-draft",
   "kind": "codex",
   "availability": "AVAILABLE_UNVERIFIED",
-  "executableVersion": null,
-  "environmentDigest": null,
+  "executableVersion": "codex-cli 0.153.4",
+  "environmentDigest": "c10aeadb56d55f6bb4789cf9c2ff87c290818210957b43116c3fb0730740249b",
   "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
   "operations": ["discover"],
-  "blocker": "Identity, version and the full adapter behavior have not been verified in the pilot repository."
+  "blocker": "Executable version is verified, but identity and task execution have not been verified through the pilot contract."
 }

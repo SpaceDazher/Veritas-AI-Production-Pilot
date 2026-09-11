@@ -3,10 +3,10 @@
   "adapterId": "veritas-generic-cli",
   "contractVersion": "1.0.0-draft",
   "kind": "generic-cli",
-  "availability": "PLANNED",
-  "executableVersion": null,
-  "environmentDigest": null,
+  "availability": "AVAILABLE_UNVERIFIED",
+  "executableVersion": "0.1.0",
+  "environmentDigest": "c10aeadb56d55f6bb4789cf9c2ff87c290818210957b43116c3fb0730740249b",
   "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
-  "operations": [],
-  "blocker": "Implementation is the first pilot work item."
+  "operations": ["discover"],
+  "blocker": "Discovery is verified; state-changing operations remain blocked until the durable PostgreSQL path is live."
 }

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node tests/validate-pilot.mjs && node --test tests/*.test.mjs",
     "verify": "npm test",
-    "discovery": "node bin/veritas-pilot.mjs discover"
+    "discovery": "node bin/veritas-pilot.mjs discover",
+    "probe:environment": "node scripts/probe-environment.mjs"
   },
   "engines": {
     "node": ">=22"

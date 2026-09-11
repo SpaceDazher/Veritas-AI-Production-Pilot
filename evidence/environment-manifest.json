@@ -1,13 +1,15 @@
 {
   "schemaVersion": 1,
   "decisionInput": true,
-  "hostClass": "windows-local-development",
+  "hostClass": "win32-x64-local-development",
   "node": {"available": true, "version": "22.23.2"},
-  "codex": {"available": true, "versionVerified": false},
-  "pi": {"available": false, "versionVerified": false},
-  "docker": {"available": false},
-  "psql": {"available": false},
-  "dedicatedPostgresql": {"available": false},
+  "codex": {"available": true, "version": "codex-cli 0.153.4", "versionVerified": true},
+  "pi": {"available": false, "version": null, "versionVerified": false},
+  "docker": {"available": false, "version": null, "versionVerified": false},
+  "psql": {"available": false, "version": null, "versionVerified": false},
+  "dedicatedPostgresql": {"available": false, "verified": false},
   "paidApiBudgetUsd": 0,
+  "environmentDigest": "c10aeadb56d55f6bb4789cf9c2ff87c290818210957b43116c3fb0730740249b",
+  "missingPrerequisites": ["pi-cli", "dedicated-postgresql"],
   "verdict": "BLOCKED_ENVIRONMENT"
 }
