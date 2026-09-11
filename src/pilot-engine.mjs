@@ -47,13 +47,17 @@ export class PilotEngine {
   #idempotencyKeys = new Map();
   #journal = [];
   #fencingToken = 0;
+  #clock;
+  #leaseTtlMs;
+  #authorizeAgentOperation;
+  #authorizeHumanDecision;
 
   constructor({ clock = Date.now, leaseTtlMs = 30_000, authorizeAgentOperation = () => false, authorizeHumanDecision = () => false } = {}) {
     if (typeof clock !== 'function' || typeof authorizeAgentOperation !== 'function' || typeof authorizeHumanDecision !== 'function' || !Number.isFinite(leaseTtlMs) || leaseTtlMs <= 0) throw new PilotError('INVALID_REQUEST', 'clock, agent and human authorizers, and a positive finite leaseTtlMs are required');
-    this.clock = clock;
-    this.leaseTtlMs = leaseTtlMs;
-    this.authorizeAgentOperation = authorizeAgentOperation;
-    this.authorizeHumanDecision = authorizeHumanDecision;
+    this.#clock = clock;
+    this.#leaseTtlMs = leaseTtlMs;
+    this.#authorizeAgentOperation = authorizeAgentOperation;
+    this.#authorizeHumanDecision = authorizeHumanDecision;
   }
 
   seedTask({ taskId, goalId, title }) {
@@ -84,7 +88,7 @@ export class PilotEngine {
     this.#validateCommand(command);
     let authorized = false;
     try {
-      authorized = this.authorizeAgentOperation(deepClone(command)) === true;
+      authorized = this.#authorizeAgentOperation(deepClone(command)) === true;
     } catch {
       authorized = false;
     }
@@ -117,7 +121,7 @@ export class PilotEngine {
     let authorized = false;
     if (decision.actorType === 'human') {
       try {
-        authorized = this.authorizeHumanDecision(deepClone(decision)) === true;
+        authorized = this.#authorizeHumanDecision(deepClone(decision)) === true;
       } catch {
         authorized = false;
       }
@@ -151,12 +155,12 @@ export class PilotEngine {
     const task = this.#task(command.taskId);
     this.#expectRevision(task, command.expectedRevision);
     if (task.status !== 'READY') throw new PilotError('INVALID_TRANSITION', 'only READY tasks can be claimed');
-    const active = [...this.#leases.values()].find((lease) => !lease.released && this.clock() < lease.expiresAt);
+    const active = [...this.#leases.values()].find((lease) => !lease.released && this.#clock() < lease.expiresAt);
     if (active) throw new PilotError('ACTIVE_JOB_EXISTS', 'the one-job pilot already has an active lease');
-    const ttl = command.arguments.leaseTtlMs ?? this.leaseTtlMs;
+    const ttl = command.arguments.leaseTtlMs ?? this.#leaseTtlMs;
     if (!Number.isFinite(ttl) || ttl <= 0) throw new PilotError('INVALID_REQUEST', 'leaseTtlMs must be positive and finite');
     this.#fencingToken += 1;
-    const lease = { leaseId: `lease-${this.#fencingToken}-${task.id}`, taskId: task.id, actorId: command.actorId, fencingToken: this.#fencingToken, expiresAt: this.clock() + ttl, released: false };
+    const lease = { leaseId: `lease-${this.#fencingToken}-${task.id}`, taskId: task.id, actorId: command.actorId, fencingToken: this.#fencingToken, expiresAt: this.#clock() + ttl, released: false };
     this.#leases.set(lease.leaseId, lease);
     task.status = 'CLAIMED';
     task.revision += 1;
@@ -176,7 +180,7 @@ export class PilotEngine {
 
   #heartbeat(command) {
     const { task, lease } = this.#leased(command, 'RUNNING');
-    lease.expiresAt = this.clock() + this.leaseTtlMs;
+    lease.expiresAt = this.#clock() + this.#leaseTtlMs;
     this.#append('LEASE_HEARTBEAT', task, command.actorId, { leaseId: lease.leaseId, expiresAt: lease.expiresAt });
     return { task: deepClone(task), lease: deepClone(lease) };
   }
@@ -230,7 +234,7 @@ export class PilotEngine {
     const lease = this.#leases.get(command.arguments.leaseId);
     if (!lease || lease.taskId !== task.id || lease.actorId !== command.actorId || lease.released) throw new PilotError('LEASE_REQUIRED', 'a live task lease owned by the actor is required');
     if (!Number.isInteger(command.arguments.fencingToken) || command.arguments.fencingToken !== lease.fencingToken) throw new PilotError('STALE_FENCE', 'fencing token does not match the active lease');
-    if (this.clock() >= lease.expiresAt) throw new PilotError('LEASE_EXPIRED', 'lease has expired');
+    if (this.#clock() >= lease.expiresAt) throw new PilotError('LEASE_EXPIRED', 'lease has expired');
     return { task, lease };
   }
 
@@ -245,7 +249,7 @@ export class PilotEngine {
   }
 
   #append(eventType, task, actorId, data) {
-    const event = { sequence: this.#journal.length + 1, eventType, taskId: task.id, actorId, taskRevision: task.revision, observedAtMs: this.clock(), previousHash: this.#journal.at(-1)?.eventHash ?? ZERO_HASH, data };
+    const event = { sequence: this.#journal.length + 1, eventType, taskId: task.id, actorId, taskRevision: task.revision, observedAtMs: this.#clock(), previousHash: this.#journal.at(-1)?.eventHash ?? ZERO_HASH, data };
     event.eventHash = canonicalHash(event);
     this.#journal.push(event);
   }

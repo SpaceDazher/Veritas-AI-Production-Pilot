@@ -90,6 +90,7 @@ test('unknown command fields fail closed', () => {
 
 test('an unregistered agent cannot claim work by naming itself in the request', () => {
   const { engine } = setup();
+  engine.authorizeAgentOperation = () => true;
   assert.throws(() => claim(engine, { actorId: 'agent-unregistered' }), (error) =>
     error instanceof PilotError && error.code === 'CAPABILITY_DENIED');
   assert.equal(engine.getTask('TASK-001').status, 'READY');
@@ -114,6 +115,7 @@ test('expired lease fails closed', () => {
   const { engine, advance } = setup();
   const leased = claim(engine).result;
   advance(100);
+  engine.clock = () => 1_000;
   assert.throws(() => engine.dispatch(base('start', {
     operationId: 'op-start-expired',
     expectedRevision: 3,
@@ -180,6 +182,7 @@ test('only an authenticated human bound to the submission may mark DONE', () => 
       artifacts: [{ path: 'dist/result.json', sha256: 'b'.repeat(64) }], checks: [{ name: 'unit', passed: true }],
     },
   })).result.task;
+  engine.authorizeHumanDecision = () => true;
   assert.throws(() => engine.recordHumanDecision({
     actorId: 'agent-codex', actorType: 'agent', authenticationProof: 'verified-by-host', taskId: reviewed.id,
     expectedRevision: reviewed.revision, decision: 'APPROVE', artifactDigest: reviewed.submissionDigest, reason: 'self approve',
