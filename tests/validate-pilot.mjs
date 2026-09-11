@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { verifyAgentAuthDigest } from '../src/agent-auth-probe.mjs';
+import { verifyExecutionBindingDigest } from '../src/agent-execution-binding.mjs';
 import { validateFrozenSourceManifest, verifyFrozenSourceSnapshots } from '../src/source-freeze.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -15,11 +16,12 @@ const contract = read('contracts/adapter-contract.json');
 const cases = read('pilot/acceptance-cases.json');
 const environment = read('evidence/environment-manifest.json');
 const agentAuth = read('evidence/agent-auth-manifest.json');
+const agentExecution = read('evidence/agent-execution-manifest.json');
 const sourceManifest = read('pilot/source-selection-manifest.json');
 const adapters = ['codex', 'pi', 'generic-cli'].map((name) => read(`pilot/adapters/${name}.json`));
 
 assert.equal(brief.status, 'BLOCKED_PREREQUISITES');
-assert.equal(brief.executionAuthorized, false);
+assert.equal(brief.executionAuthorized, true);
 assert.equal(brief.constraints.maxConcurrentJobs, 1);
 assert.equal(brief.constraints.paidApiBudgetUsd, 0);
 assert.equal(brief.constraints.agentFinalApprovalAuthorized, false);
@@ -43,12 +45,18 @@ assert.equal(agentAuth.verdict, 'AUTH_READY_EXECUTION_UNVERIFIED');
 assert.equal(agentAuth.modelCallsExecuted, 0);
 assert.equal(agentAuth.credentialsEmitted, false);
 assert.equal(verifyAgentAuthDigest(agentAuth), true);
+assert.equal(agentExecution.verdict, 'EXECUTION_BINDINGS_VERIFIED');
+assert.equal(agentExecution.toolsAuthorized, false);
+assert.equal(agentExecution.productionActionsAuthorized, false);
+assert.equal(agentExecution.incrementalPaidApiBudgetAuthorizedUsd, 0);
+assert.equal(verifyExecutionBindingDigest(agentExecution), true);
 assert.equal(sourceManifest.status, 'FROZEN');
 assert.deepEqual(sourceManifest.localOnlySources, []);
 assert.deepEqual(validateFrozenSourceManifest(sourceManifest), []);
 assert.deepEqual(verifyFrozenSourceSnapshots(sourceManifest, new URL('../', import.meta.url)), []);
 assert.deepEqual(adapters.map((adapter) => adapter.kind), ['codex', 'pi', 'generic-cli']);
-assert.deepEqual(adapters.slice(0, 2).map((adapter) => adapter.availability), ['AUTH_READY_EXECUTION_UNVERIFIED', 'AUTH_READY_EXECUTION_UNVERIFIED']);
+assert.deepEqual(adapters.slice(0, 2).map((adapter) => adapter.availability), ['TRANSPORT_VERIFIED_TASK_LIFECYCLE_PENDING', 'TRANSPORT_VERIFIED_TASK_LIFECYCLE_PENDING']);
+assert(adapters.slice(0, 2).every((adapter) => adapter.executionBinding?.digest === agentExecution.executionBindingDigest));
 assert(adapters.every((adapter) => adapter.authority === 'IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY'));
 assert(adapters.every((adapter) => adapter.contractVersion === contract.contractVersion));
 
@@ -73,7 +81,7 @@ for (const file of walk(root)) {
 
 const evidence = {
   verdict: 'PASS_CONTRACT_BLOCKED_EXECUTION',
-  assertions: 35,
+  assertions: 41,
   taskBriefSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'pilot/task-brief.json'))).digest('hex'),
   adapterContractSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'contracts/adapter-contract.json'))).digest('hex'),
   limitations: brief.blockers,

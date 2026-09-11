@@ -26,8 +26,8 @@
   "workflow": ["BACKLOG", "READY", "CLAIMED", "RUNNING", "IN_REVIEW"],
   "humanDecisionOwner": "repository-owner",
   "budgetOwner": "repository-owner",
-  "executionAuthorized": false,
+  "executionAuthorized": true,
   "blockers": [
-    "real Codex/pi task-execution bindings have not been frozen"
+    "persistent PostgreSQL CLI and real Codex/Pi task lifecycle through IN_REVIEW have not been executed"
   ]
 }

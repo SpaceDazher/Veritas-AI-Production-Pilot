@@ -11,10 +11,11 @@ const [brief, contract, environment] = await Promise.all([
   loadJson('evidence/environment-manifest.json'),
 ]);
 const missingPrerequisites = [!environment.pi?.available && 'pi-cli', !environment.dedicatedPostgresql?.available && 'dedicated-postgresql'].filter(Boolean);
-const executionEnabled = brief.executionAuthorized === true && missingPrerequisites.length === 0;
+const blockers = Array.isArray(brief.blockers) ? brief.blockers : [];
+const executionEnabled = brief.executionAuthorized === true && missingPrerequisites.length === 0 && blockers.length === 0;
 const status = missingPrerequisites.length > 0
   ? 'BLOCKED_ENVIRONMENT'
-  : brief.blockers.length > 0 ? 'BLOCKED_PREREQUISITES'
+  : blockers.length > 0 ? 'BLOCKED_PREREQUISITES'
     : executionEnabled ? 'READY' : 'BLOCKED_AUTHORIZATION';
 const operation = process.argv[2] ?? 'discover';
 

@@ -12,8 +12,10 @@ loopback-only PostgreSQL `17.11` database are version-verified. The database
 migration has been applied. Codex subscription and Pi `zai-coding-cn`
 authentication are verified without emitting credentials or invoking a model.
 Five primary public sources are frozen as tracked SHA-256-bound snapshots;
-local-only inputs are explicitly empty. Real task-execution bindings are still
-open, so execution remains fail-closed.
+local-only inputs are explicitly empty. A bounded, authority-free transport
+smoke has executed successfully through real Codex and Pi processes, with
+separate PIDs and no raw transcripts committed. Persistent task lifecycle
+execution through PostgreSQL remains open, so completion remains fail-closed.
 
 ## Phase 1 — contract tests
 

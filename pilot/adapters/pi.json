@@ -3,11 +3,12 @@
   "adapterId": "pi-local",
   "contractVersion": "1.0.0-draft",
   "kind": "pi",
-  "availability": "AUTH_READY_EXECUTION_UNVERIFIED",
+  "availability": "TRANSPORT_VERIFIED_TASK_LIFECYCLE_PENDING",
   "executableVersion": "0.85.1",
   "environmentDigest": "8361bf276f0bc879e04939c2461658a56ad062723c49e007ac617c0207209850",
   "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
   "operations": ["discover"],
   "authBinding": {"status": "ready", "provider": "zai-coding-cn", "authType": "api_key", "manifest": "evidence/agent-auth-manifest.json"},
-  "blocker": "Executable version and provider authentication are verified, but task execution has not been verified through the pilot contract."
+  "executionBinding": {"status": "verified", "manifest": "evidence/agent-execution-manifest.json", "digest": "634940c3321b3e0d51eaefc3f55c0e57250da53560a34a5ad57020c962b878f4"},
+  "blocker": "Transport execution is verified, but the real task lifecycle has not reached IN_REVIEW through PostgreSQL."
 }
