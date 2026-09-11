@@ -36,6 +36,7 @@ production-like local result is not a production certification.
 
 ## Current disposition
 
-`BLOCKED_ENVIRONMENT`: Codex and Node.js are present, but the required pi CLI
-and dedicated PostgreSQL/Docker runtime are absent. This repository freezes the
-contract and work split; it does not claim that the real pilot has run.
+`BLOCKED_PREREQUISITES`: Codex, Pi, Node.js and a dedicated loopback-only
+PostgreSQL database are present and version-verified. Provider authentication,
+real adapter task execution and the exact source freeze remain incomplete. This
+repository does not claim that the real pilot has run.

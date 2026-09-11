@@ -18,6 +18,37 @@ const probe = (run, executable) => {
   return { available: version !== null, version, versionVerified: version !== null };
 };
 
+const probeDatabase = (databaseProbe) => {
+  if (typeof databaseProbe !== 'function') return { available: false, verified: false };
+  let result;
+  try {
+    result = databaseProbe();
+  } catch {
+    return { available: false, verified: false };
+  }
+  const lines = typeof result?.stdout === 'string' ? result.stdout.trim().split(/\r?\n/) : [];
+  const fields = lines.length === 1 ? lines[0].split('|') : [];
+  const [serverVersion, database, applicationRole, tableCountText] = fields;
+  const tableCount = Number(tableCountText);
+  const valid = result?.status === 0
+    && fields.length === 4
+    && serverVersion === '17.11'
+    && database === 'veritas_pilot'
+    && applicationRole === 'veritas_app'
+    && Number.isInteger(tableCount)
+    && tableCount >= 8
+    && /^[a-f0-9]{64}$/.test(result.migrationSha256 ?? '');
+  return valid ? {
+    available: true,
+    verified: true,
+    serverVersion,
+    database,
+    applicationRole,
+    publicTableCount: tableCount,
+    migrationSha256: result.migrationSha256,
+  } : { available: false, verified: false };
+};
+
 const digestInput = (observation) => ({
   schemaVersion: observation.schemaVersion,
   decisionInput: observation.decisionInput,
@@ -40,7 +71,7 @@ export const verifyEnvironmentDigest = (observation) => {
   }
 };
 
-export const buildEnvironmentObservation = ({ run, nodeVersion, platform, architecture }) => {
+export const buildEnvironmentObservation = ({ run, databaseProbe, nodeVersion, platform, architecture }) => {
   if (typeof run !== 'function') throw new TypeError('run must be a function');
   const decisionInput = {
     schemaVersion: 1,
@@ -51,7 +82,7 @@ export const buildEnvironmentObservation = ({ run, nodeVersion, platform, archit
     pi: probe(run, 'pi'),
     psql: probe(run, 'psql'),
     docker: probe(run, 'docker'),
-    dedicatedPostgresql: { available: false, verified: false },
+    dedicatedPostgresql: probeDatabase(databaseProbe),
     paidApiBudgetUsd: 0,
   };
   const missing = [

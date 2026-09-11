@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "S2-001-PILOT-AI-PRODUCTION-001",
   "revision": 1,
-  "status": "BLOCKED_ENVIRONMENT",
+  "status": "BLOCKED_PREREQUISITES",
   "question": "How can an autonomous but human-governed system take an AI application from zero to a production-candidate release with reproducible decisions and measurable quality, safety, cost, latency and reliability?",
   "targetOutcome": "A minimal adapter and one-job runner exercised by real Codex and pi adapters through IN_REVIEW, followed by a human decision.",
   "dependency": {
@@ -28,7 +28,6 @@
   "budgetOwner": "repository-owner",
   "executionAuthorized": false,
   "blockers": [
-    "dedicated PostgreSQL and Docker/psql are not available on the current host",
     "Pi provider identity/authentication and real Codex/pi task-execution bindings have not been frozen",
     "the exact public and local-only research sources have not been frozen by version and SHA-256"
   ]

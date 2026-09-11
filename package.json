@@ -7,7 +7,11 @@
     "test": "node tests/validate-pilot.mjs && node --test tests/*.test.mjs",
     "verify": "npm test",
     "discovery": "node bin/veritas-pilot.mjs discover",
-    "probe:environment": "node scripts/probe-environment.mjs"
+    "probe:environment": "node scripts/probe-environment.mjs",
+    "provision:postgres": "node scripts/provision-local-postgres.mjs",
+    "postgres:start": "node scripts/postgres-lifecycle.mjs start",
+    "postgres:status": "node scripts/postgres-lifecycle.mjs status",
+    "postgres:stop": "node scripts/postgres-lifecycle.mjs stop"
   },
   "engines": {
     "node": ">=22"

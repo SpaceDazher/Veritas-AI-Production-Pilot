@@ -48,3 +48,29 @@ test('tracked environment observation has a valid decision-input digest', () => 
   assert.equal(verifyEnvironmentDigest(manifest), true);
   assert.equal(verifyEnvironmentDigest({ ...manifest, hostClass: 'forged-host' }), false);
 });
+
+test('dedicated PostgreSQL is verified only from an exact live proof', () => {
+  const run = (executable) => ({
+    status: executable === 'psql' ? 0 : 1,
+    stdout: executable === 'psql' ? 'psql (PostgreSQL) 17.11\n' : '',
+    stderr: '',
+  });
+  const databaseProbe = () => ({
+    status: 0,
+    stdout: '17.11|veritas_pilot|veritas_app|8',
+    migrationSha256: '020ea66c831d9002477a8c360d8d2f8be3cb156a2d66f0cd89a5117ad014cf27',
+  });
+  const observation = buildEnvironmentObservation({
+    run, databaseProbe, nodeVersion: 'v22.23.2', platform: 'win32', architecture: 'x64',
+  });
+  assert.equal(observation.dedicatedPostgresql.available, true);
+  assert.equal(observation.dedicatedPostgresql.verified, true);
+  assert.deepEqual(observation.missingPrerequisites, ['pi-cli']);
+
+  const forged = buildEnvironmentObservation({
+    run,
+    databaseProbe: () => ({ status: 0, stdout: '17.11|wrong_db|veritas_app|8', migrationSha256: 'a'.repeat(64) }),
+    nodeVersion: 'v22.23.2', platform: 'win32', architecture: 'x64',
+  });
+  assert.equal(forged.dedicatedPostgresql.available, false);
+});

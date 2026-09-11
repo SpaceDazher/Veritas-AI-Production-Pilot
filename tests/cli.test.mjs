@@ -17,7 +17,8 @@ test('discovery is machine-readable and honestly reports blockers', () => {
   assert.equal(output.contractVersion, '1.0.0-draft');
   assert.equal(output.executionEnabled, false);
   assert.equal(output.maxConcurrentJobs, 1);
-  assert.deepEqual(output.missingPrerequisites, ['dedicated-postgresql']);
+  assert.deepEqual(output.missingPrerequisites, []);
+  assert.equal(output.status, 'BLOCKED_PREREQUISITES');
 });
 
 test('state-changing CLI commands fail closed while prerequisites are missing', () => {
@@ -27,5 +28,5 @@ test('state-changing CLI commands fail closed while prerequisites are missing', 
     env: { PATH: process.env.PATH ?? '' },
   });
   assert.equal(result.status, 2);
-  assert.match(result.stderr, /BLOCKED_ENVIRONMENT/);
+  assert.match(result.stderr, /BLOCKED_PREREQUISITES/);
 });

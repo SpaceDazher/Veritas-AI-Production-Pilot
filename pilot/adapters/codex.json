@@ -5,7 +5,7 @@
   "kind": "codex",
   "availability": "AVAILABLE_UNVERIFIED",
   "executableVersion": "codex-cli 0.153.4",
-  "environmentDigest": "8f89a19dcf6ba4d87aa01d011c1a4244b1bea19df18afb9b9076f6cf00bbb933",
+  "environmentDigest": "8361bf276f0bc879e04939c2461658a56ad062723c49e007ac617c0207209850",
   "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
   "operations": ["discover"],
   "blocker": "Executable version is verified, but identity and task execution have not been verified through the pilot contract."
