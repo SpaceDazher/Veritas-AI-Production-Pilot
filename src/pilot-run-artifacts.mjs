@@ -14,14 +14,17 @@ const strings = (value, minimum = 0) => Array.isArray(value) && value.length >= 
 const records = (value, keys, minimum = 1) => Array.isArray(value) && value.length >= minimum && value.every((item) => exactKeys(item, keys) && keys.every((key) => typeof item[key] === 'string' && item[key].trim() !== ''));
 const parse = (text) => {
   if (typeof text !== 'string' || text.length > 100_000) return null;
-  try { return JSON.parse(text.trim()); } catch { return null; }
+  const trimmed = text.trim();
+  const fenced = trimmed.match(/^```(?:json)?\s*\r?\n([\s\S]*?)\r?\n```$/i);
+  const payload = fenced ? fenced[1].trim() : trimmed;
+  try { return JSON.parse(payload); } catch { return null; }
 };
 
 export const parseCodexSolution = (text) => {
   const value = parse(text);
   if (!exactKeys(value, SOLUTION_KEYS)
       || value.schemaVersion !== 1
-      || value.taskId !== 'S2-001-AI-PRODUCTION-TASK-v1'
+      || value.taskId !== 'S2-001-AI-PRODUCTION-TASK-v2'
       || value.role !== 'codex-implementer'
       || typeof value.objective !== 'string' || value.objective.trim().length < 20
       || !strings(value.assumptions, 2)
@@ -38,7 +41,7 @@ export const parsePiReview = (text) => {
   const value = parse(text);
   if (!exactKeys(value, REVIEW_KEYS)
       || value.schemaVersion !== 1
-      || value.taskId !== 'S2-001-AI-PRODUCTION-TASK-v1'
+      || value.taskId !== 'S2-001-AI-PRODUCTION-TASK-v2'
       || value.role !== 'pi-independent-reviewer'
       || !['PASS_WITH_LIMITS', 'REVISE'].includes(value.verdict)
       || !strings(value.verifiedCriteria, 2)
@@ -47,6 +50,44 @@ export const parsePiReview = (text) => {
       || value.productionApproval !== false
       || !Array.isArray(value.authorityClaims) || value.authorityClaims.length !== 0) return null;
   return value;
+};
+
+const verifyTaskEventSlice = (events) => Array.isArray(events) && events.length >= 2
+  && events.every((event, index) => HEX64.test(event.event_hash ?? '')
+    && HEX64.test(event.previous_hash ?? '')
+    && (index === 0 || event.previous_hash === events[index - 1].event_hash));
+
+export const buildFailedPilotAttemptEvidence = ({ taskSnapshot, codexArtifactSha256 }) => {
+  if (taskSnapshot?.task?.id !== 'S2-001-AI-PRODUCTION-TASK-v1' || taskSnapshot.task.status !== 'FAILED') {
+    throw new Error('failed pilot evidence requires the terminal v1 task');
+  }
+  if (!Number.isInteger(taskSnapshot.task.revision) || !verifyTaskEventSlice(taskSnapshot.events)) {
+    throw new Error('failed pilot audit evidence is invalid');
+  }
+  if (!HEX64.test(codexArtifactSha256 ?? '')) throw new Error('failed pilot Codex artifact binding is invalid');
+  const terminalReason = taskSnapshot.task.terminal_reason ?? taskSnapshot.events.at(-1)?.event_data?.reason;
+  if (typeof terminalReason !== 'string' || terminalReason.trim() === '') throw new Error('failed pilot terminal reason is missing');
+  const evidence = {
+    schemaVersion: 1,
+    decisionInput: false,
+    taskId: taskSnapshot.task.id,
+    status: taskSnapshot.task.status,
+    taskRevision: taskSnapshot.task.revision,
+    terminalReason,
+    eventCount: taskSnapshot.events.length,
+    priorGlobalEventHash: taskSnapshot.events[0].previous_hash,
+    firstEventHash: taskSnapshot.events[0].event_hash,
+    lastEventHash: taskSnapshot.events.at(-1).event_hash,
+    chainLinked: true,
+    failureStage: 'pi-output-contract',
+    codexArtifactSha256,
+    piRawPersisted: false,
+    modelCallsExecuted: 2,
+    productionDeployed: false,
+    humanDecisionRecorded: false,
+    disposition: 'RETRY_AS_NEW_TASK_REVISION',
+  };
+  return { ...evidence, failureEvidenceDigest: canonicalHash(evidence) };
 };
 
 const digestInput = (manifest) => {
@@ -59,8 +100,7 @@ export const buildPilotRunManifest = ({ taskSnapshot, codex, pi, sourceManifestS
   if (taskSnapshot?.task?.status !== 'IN_REVIEW') throw new Error('pilot task must stop at IN_REVIEW');
   if (!Number.isInteger(taskSnapshot.task.revision) || !HEX64.test(taskSnapshot.task.submission_digest ?? '')) throw new Error('task submission binding is invalid');
   if (!Array.isArray(taskSnapshot.events) || taskSnapshot.events.length < 2) throw new Error('task audit evidence is incomplete');
-  const chainLinked = taskSnapshot.events.every((event, index) => HEX64.test(event.event_hash ?? '')
-    && event.previous_hash === (index === 0 ? '0'.repeat(64) : taskSnapshot.events[index - 1].event_hash));
+  const chainLinked = verifyTaskEventSlice(taskSnapshot.events);
   if (!chainLinked) throw new Error('task audit chain is stale');
   for (const [name, run] of [['codex', codex], ['pi', pi]]) {
     if (!Number.isInteger(run?.processId) || run.processId <= 0) throw new Error(`${name} process identity is invalid`);
@@ -76,6 +116,7 @@ export const buildPilotRunManifest = ({ taskSnapshot, codex, pi, sourceManifestS
     taskRevision: taskSnapshot.task.revision,
     submissionDigest: taskSnapshot.task.submission_digest,
     eventCount: taskSnapshot.events.length,
+    priorGlobalEventHash: taskSnapshot.events[0].previous_hash,
     firstEventHash: taskSnapshot.events[0].event_hash,
     lastEventHash: taskSnapshot.events.at(-1).event_hash,
     chainLinked,

@@ -5,7 +5,7 @@
   "required": ["schemaVersion", "taskId", "role", "objective", "assumptions", "architecture", "deliveryStages", "metrics", "risks", "productionDeploymentAuthorized", "finalApprovalClaimed"],
   "properties": {
     "schemaVersion": {"type": "integer", "const": 1},
-    "taskId": {"type": "string", "const": "S2-001-AI-PRODUCTION-TASK-v1"},
+    "taskId": {"type": "string", "const": "S2-001-AI-PRODUCTION-TASK-v2"},
     "role": {"type": "string", "const": "codex-implementer"},
     "objective": {"type": "string"},
     "assumptions": {"type": "array", "items": {"type": "string"}},
