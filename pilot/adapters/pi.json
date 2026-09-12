@@ -5,7 +5,7 @@
   "kind": "pi",
   "availability": "TRANSPORT_VERIFIED_TASK_LIFECYCLE_PENDING",
   "executableVersion": "0.85.1",
-  "environmentDigest": "2a2740c29538202f4abeaf5c5836795d2063aec64f79f94c86b67fbcab41ab1d",
+  "environmentDigest": "d3d096b549b4d739dcddfa6d8e1cab8793f22262cd1f22d4751434b875a33a16",
   "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
   "operations": ["discover"],
   "authBinding": {"status": "ready", "provider": "zai-coding-cn", "authType": "api_key", "manifest": "evidence/agent-auth-manifest.json"},

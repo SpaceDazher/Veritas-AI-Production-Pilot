@@ -205,7 +205,7 @@ BEGIN
      WHERE released_at IS NULL AND expires_at <= clock_timestamp();
     IF EXISTS (SELECT 1 FROM task_lease WHERE released_at IS NULL) THEN RAISE EXCEPTION 'ACTIVE_JOB_EXISTS'; END IF;
     v_ttl_ms := coalesce((v_arguments->>'leaseTtlMs')::bigint, 30000);
-    IF v_ttl_ms < 1 OR v_ttl_ms > 300000 THEN RAISE EXCEPTION 'INVALID_REQUEST: leaseTtlMs'; END IF;
+    IF v_ttl_ms < 1 OR v_ttl_ms > 900000 THEN RAISE EXCEPTION 'INVALID_REQUEST: leaseTtlMs'; END IF;
     INSERT INTO task_lease (lease_id, task_id, actor_id, expires_at)
     VALUES ('lease-' || left(v_request_hash, 24), v_task.id, v_actor_id, clock_timestamp() + (v_ttl_ms * interval '1 millisecond'))
     RETURNING * INTO v_lease;

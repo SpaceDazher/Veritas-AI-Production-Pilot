@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "taskId", "role", "objective", "assumptions", "architecture", "deliveryStages", "metrics", "risks", "productionDeploymentAuthorized", "finalApprovalClaimed"],
+  "properties": {
+    "schemaVersion": {"type": "integer", "const": 1},
+    "taskId": {"type": "string", "const": "S2-001-AI-PRODUCTION-TASK-v1"},
+    "role": {"type": "string", "const": "codex-implementer"},
+    "objective": {"type": "string"},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "architecture": {"type": "array", "items": {"type": "string"}},
+    "deliveryStages": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["name", "outcome", "verification"], "properties": {"name": {"type": "string"}, "outcome": {"type": "string"}, "verification": {"type": "string"}}}},
+    "metrics": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["name", "target", "measurement"], "properties": {"name": {"type": "string"}, "target": {"type": "string"}, "measurement": {"type": "string"}}}},
+    "risks": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["risk", "mitigation"], "properties": {"risk": {"type": "string"}, "mitigation": {"type": "string"}}}},
+    "productionDeploymentAuthorized": {"type": "boolean", "const": false},
+    "finalApprovalClaimed": {"type": "boolean", "const": false}
+  }
+}

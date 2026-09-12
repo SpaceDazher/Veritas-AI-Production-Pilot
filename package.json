@@ -11,6 +11,7 @@
     "probe:auth": "node scripts/probe-agent-auth.mjs",
     "probe:execution": "node scripts/probe-agent-execution.mjs --execute",
     "probe:postgres-command": "node scripts/probe-persistent-command-path.mjs",
+    "pilot:run": "node scripts/run-real-pilot.mjs --execute",
     "freeze:sources": "node scripts/freeze-sources.mjs --refresh",
     "verify:sources": "node scripts/freeze-sources.mjs",
     "provision:postgres": "node scripts/provision-local-postgres.mjs",

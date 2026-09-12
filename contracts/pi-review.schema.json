@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "taskId", "role", "verdict", "verifiedCriteria", "findings", "requiredChanges", "productionApproval", "authorityClaims"],
+  "properties": {
+    "schemaVersion": {"type": "integer", "const": 1},
+    "taskId": {"type": "string", "const": "S2-001-AI-PRODUCTION-TASK-v1"},
+    "role": {"type": "string", "const": "pi-independent-reviewer"},
+    "verdict": {"type": "string", "enum": ["PASS_WITH_LIMITS", "REVISE"]},
+    "verifiedCriteria": {"type": "array", "items": {"type": "string"}},
+    "findings": {"type": "array", "items": {"type": "string"}},
+    "requiredChanges": {"type": "array", "items": {"type": "string"}},
+    "productionApproval": {"type": "boolean", "const": false},
+    "authorityClaims": {"type": "array", "items": {"type": "string"}, "maxItems": 0}
+  }
+}
