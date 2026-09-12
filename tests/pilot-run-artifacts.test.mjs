@@ -96,6 +96,8 @@ test('failed v1 attempt is evidence-bound without upgrading it to a decision inp
   assert.equal(evidence.disposition, 'RETRY_AS_NEW_TASK_REVISION');
   assert.equal(evidence.piRawPersisted, false);
   assert.match(evidence.failureEvidenceDigest, /^[a-f0-9]{64}$/);
+  const tracked = JSON.parse(readFileSync(path.join(root, 'evidence', 'pilot-run-attempt-v1.json'), 'utf8'));
+  assert.equal(tracked.codexArtifactSha256, sha256File('results/pilot-run/codex-solution.json'));
 });
 
 test('tracked v2 pilot evidence is digest-bound to source and agent artifacts', () => {

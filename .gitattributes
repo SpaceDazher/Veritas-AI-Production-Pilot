@@ -1,2 +1,3 @@
 evidence/source-snapshots/** -text
 pilot/source-selection-manifest.json -text
+results/pilot-run/** -text
