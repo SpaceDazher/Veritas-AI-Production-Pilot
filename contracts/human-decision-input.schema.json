@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "decisionId", "taskId", "taskRevision", "actorId", "decision", "decisionScope", "artifactDigest", "reason"],
+  "properties": {
+    "schemaVersion": {"type": "integer", "const": 1},
+    "decisionId": {"type": "string", "minLength": 1},
+    "taskId": {"type": "string", "const": "S2-001-AI-PRODUCTION-TASK-v2"},
+    "taskRevision": {"type": "integer", "const": 6},
+    "actorId": {"type": "string", "const": "repository-owner"},
+    "decision": {"type": "string", "enum": ["APPROVE", "REVISE", "REJECT"]},
+    "decisionScope": {"type": "string", "const": "solution"},
+    "artifactDigest": {"type": "string", "const": "d3b3e32a90a6f26efc0a654d239feed8fe98d1101a949ad6e572ebea4f0a9048"},
+    "reason": {"type": "string", "minLength": 20}
+  }
+}

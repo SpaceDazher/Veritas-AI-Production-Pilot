@@ -19,7 +19,8 @@ const ARGUMENT_FIELDS = {
   fail: new Set(['idempotencyKey', 'leaseId', 'fencingToken', 'reason']),
   cancel: new Set(['idempotencyKey', 'leaseId', 'fencingToken', 'reason']),
 };
-const DATABASE_FUNCTIONS = new Set(['pilot_seed_task', 'pilot_mark_ready', 'pilot_dispatch', 'pilot_task_snapshot']);
+const DATABASE_FUNCTIONS = new Set(['pilot_seed_task', 'pilot_mark_ready', 'pilot_dispatch', 'pilot_task_snapshot', 'pilot_record_human_decision']);
+const HUMAN_DECISION_FIELDS = new Set(['schemaVersion', 'decisionId', 'taskId', 'taskRevision', 'actorId', 'decision', 'decisionScope', 'artifactDigest', 'reason']);
 
 const exactObject = (value, fields, name) => {
   if (value === null || typeof value !== 'object' || Array.isArray(value)) throw new Error(`${name} must be an object`);
@@ -39,6 +40,18 @@ export const validatePersistentCommand = (command) => {
   exactObject(command.arguments, ARGUMENT_FIELDS[command.operation], 'arguments');
   requiredString(command.arguments.idempotencyKey, 'arguments.idempotencyKey');
   return structuredClone(command);
+};
+
+export const validateHumanDecision = (decision) => {
+  exactObject(decision, HUMAN_DECISION_FIELDS, 'human decision');
+  if (decision.schemaVersion !== 1) throw new Error('unsupported human decision schemaVersion');
+  for (const field of ['decisionId', 'taskId', 'actorId', 'decision', 'decisionScope', 'artifactDigest', 'reason']) requiredString(decision[field], field);
+  if (!Number.isInteger(decision.taskRevision) || decision.taskRevision < 1) throw new Error('taskRevision must be a positive integer');
+  if (decision.actorId !== 'repository-owner') throw new Error('human decision requires repository-owner');
+  if (!['APPROVE', 'REVISE', 'REJECT'].includes(decision.decision)) throw new Error('unsupported human decision');
+  if (decision.decisionScope !== 'solution') throw new Error('human decision scope must be solution');
+  if (!/^[a-f0-9]{64}$/.test(decision.artifactDigest)) throw new Error('artifactDigest must be a lowercase SHA-256');
+  return structuredClone(decision);
 };
 
 export const buildPsqlInvocation = ({ executable, runtime, payload, functionName }) => {
@@ -96,3 +109,4 @@ export const dispatchPersistentCommand = (command, options) => callPostgresFunct
 export const seedPersistentTask = (payload, options) => callPostgresFunction('pilot_seed_task', payload, options);
 export const markPersistentTaskReady = (payload, options) => callPostgresFunction('pilot_mark_ready', payload, options);
 export const getPersistentTaskSnapshot = (taskId, options) => callPostgresFunction('pilot_task_snapshot', { taskId }, options);
+export const recordPersistentHumanDecision = (decision, options) => callPostgresFunction('pilot_record_human_decision', validateHumanDecision(decision), options);

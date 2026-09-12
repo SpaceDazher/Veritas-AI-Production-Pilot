@@ -8,6 +8,7 @@ import { canonicalHash } from '../src/canonical.mjs';
 
 import {
   buildPsqlInvocation,
+  validateHumanDecision,
   validatePersistentCommand,
 } from '../src/postgres-control-plane.mjs';
 
@@ -38,6 +39,36 @@ test('persistent command validation rejects unknown fields before database execu
   assert.throws(() => validatePersistentCommand({ ...command, authority: 'DONE' }), /unknown fields/);
   assert.throws(() => validatePersistentCommand({ ...command, expectedRevision: 0 }), /expectedRevision/);
   assert.throws(() => validatePersistentCommand({ ...command, operation: 'approve' }), /unsupported operation/);
+});
+
+test('human decision input is exact digest-bound and cannot name an agent principal', () => {
+  const decision = {
+    schemaVersion: 1,
+    decisionId: 'decision-s2-001-v2',
+    taskId: 'S2-001-AI-PRODUCTION-TASK-v2',
+    taskRevision: 6,
+    actorId: 'repository-owner',
+    decision: 'APPROVE',
+    decisionScope: 'solution',
+    artifactDigest: 'a'.repeat(64),
+    reason: 'Reviewed the bounded pilot evidence and approve the solution blueprint with its recorded limits.',
+  };
+  assert.deepEqual(validateHumanDecision(decision), decision);
+  assert.throws(() => validateHumanDecision({ ...decision, actorId: 'codex-local' }), /repository-owner/);
+  assert.throws(() => validateHumanDecision({ ...decision, artifactDigest: 'bad' }), /artifactDigest/);
+  assert.throws(() => validateHumanDecision({ ...decision, authority: 'production' }), /unknown fields/);
+});
+
+test('human decision migration is atomic human-only and advances the task from review', () => {
+  const sql = readFileSync(path.join(root, 'migrations', '003_human_decision_path.sql'), 'utf8');
+  assert.match(sql, /CREATE OR REPLACE FUNCTION pilot_record_human_decision\b/i);
+  assert.match(sql, /FOR UPDATE/i);
+  assert.match(sql, /human_decision/i);
+  assert.match(sql, /actor_type\s+IS DISTINCT FROM\s+'human'/i);
+  assert.match(sql, /WHEN 'APPROVE' THEN 'DONE'/i);
+  assert.match(sql, /pilot_append_event/i);
+  assert.doesNotMatch(sql, /DROP\s+(TABLE|SCHEMA|DATABASE)/i);
+  assert.doesNotMatch(sql, /GRANT\s+ALL/i);
 });
 
 test('psql invocation is shell-free credential-free and binds one JSON payload', () => {
