@@ -1,5 +1,9 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 
 import {
   buildFailedPilotAttemptEvidence,
@@ -8,6 +12,9 @@ import {
   parsePiReview,
   verifyPilotRunDigest,
 } from '../src/pilot-run-artifacts.mjs';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const sha256File = (relativePath) => createHash('sha256').update(readFileSync(path.join(root, relativePath))).digest('hex');
 
 const solution = () => ({
   schemaVersion: 1,
@@ -89,4 +96,19 @@ test('failed v1 attempt is evidence-bound without upgrading it to a decision inp
   assert.equal(evidence.disposition, 'RETRY_AS_NEW_TASK_REVISION');
   assert.equal(evidence.piRawPersisted, false);
   assert.match(evidence.failureEvidenceDigest, /^[a-f0-9]{64}$/);
+});
+
+test('tracked v2 pilot evidence is digest-bound to source and agent artifacts', () => {
+  const manifest = JSON.parse(readFileSync(path.join(root, 'evidence', 'pilot-run-manifest.json'), 'utf8'));
+  const environment = JSON.parse(readFileSync(path.join(root, 'evidence', 'environment-manifest.json'), 'utf8'));
+  assert.equal(verifyPilotRunDigest(manifest), true);
+  assert.equal(manifest.taskId, 'S2-001-AI-PRODUCTION-TASK-v2');
+  assert.equal(manifest.status, 'IN_REVIEW');
+  assert.equal(manifest.verdict, 'AWAITING_HUMAN_DECISION');
+  assert.equal(manifest.humanDecisionRecorded, false);
+  assert.equal(manifest.productionDeployed, false);
+  assert.equal(manifest.sourceManifestSha256, sha256File('pilot/source-selection-manifest.json'));
+  assert.equal(manifest.environmentDigest, environment.environmentDigest);
+  assert.equal(manifest.agents.codex.artifactSha256, sha256File('results/pilot-run/v2/codex-solution.json'));
+  assert.equal(manifest.agents.pi.artifactSha256, sha256File('results/pilot-run/v2/pi-review.json'));
 });
