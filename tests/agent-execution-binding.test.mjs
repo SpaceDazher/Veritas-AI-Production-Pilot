@@ -74,25 +74,26 @@ test('Codex output schema gives every constrained property an explicit JSON type
   assert.equal(schema.properties.authorityClaims.items.type, 'string');
 });
 
-test('frozen adapter manifests distinguish verified transport from pending task lifecycle', () => {
+test('frozen adapter manifests retain transport binding after verified task lifecycle', () => {
   const load = (relative) => JSON.parse(readFileSync(new URL(`../${relative}`, import.meta.url), 'utf8'));
   const binding = load('evidence/agent-execution-manifest.json');
   const brief = load('pilot/task-brief.json');
   for (const name of ['codex', 'pi']) {
     const adapter = load(`pilot/adapters/${name}.json`);
-    assert.equal(adapter.availability, 'TRANSPORT_VERIFIED_TASK_LIFECYCLE_PENDING');
+    assert.equal(adapter.availability, 'TASK_LIFECYCLE_VERIFIED');
     assert.equal(adapter.executionBinding.manifest, 'evidence/agent-execution-manifest.json');
     assert.equal(adapter.executionBinding.digest, binding.executionBindingDigest);
-    assert.match(adapter.blocker, /task lifecycle/i);
+    assert.equal(adapter.blocker, null);
   }
-  assert.equal(brief.executionAuthorized, true);
-  assert.equal(brief.status, 'READY_FOR_EXECUTION');
+  assert.equal(brief.executionAuthorized, false);
+  assert.equal(brief.status, 'DONE_WITH_LIMITS');
   assert.deepEqual(brief.blockers, []);
 });
 
 test('adapter manifest schema represents frozen auth and execution bindings', () => {
   const schema = JSON.parse(readFileSync(new URL('../contracts/adapter-manifest.schema.json', import.meta.url), 'utf8'));
   assert(schema.properties.availability.enum.includes('TRANSPORT_VERIFIED_TASK_LIFECYCLE_PENDING'));
+  assert(schema.properties.availability.enum.includes('TASK_LIFECYCLE_VERIFIED'));
   assert(schema.properties.availability.enum.includes('VERIFIED'));
   assert.equal(schema.properties.authBinding.type, 'object');
   assert.equal(schema.properties.executionBinding.properties.digest.pattern, '^[a-f0-9]{64}$');

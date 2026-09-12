@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-test('discovery is machine-readable and reports the persistent CLI ready for the bounded pilot', () => {
+test('discovery is machine-readable and disables agent execution after pilot closure', () => {
   const result = spawnSync(process.execPath, ['bin/veritas-pilot.mjs', 'discover'], {
     cwd: root,
     encoding: 'utf8',
@@ -15,19 +15,19 @@ test('discovery is machine-readable and reports the persistent CLI ready for the
   assert.equal(result.status, 0, result.stderr);
   const output = JSON.parse(result.stdout);
   assert.equal(output.contractVersion, '1.0.0-draft');
-  assert.equal(output.executionEnabled, true);
+  assert.equal(output.executionEnabled, false);
   assert.equal(output.maxConcurrentJobs, 1);
   assert.deepEqual(output.missingPrerequisites, []);
-  assert.equal(output.status, 'READY');
+  assert.equal(output.status, 'BLOCKED_AUTHORIZATION');
 });
 
-test('state-changing CLI commands require a repository-local JSON input file', () => {
+test('state-changing agent CLI commands remain blocked after pilot closure', () => {
   const result = spawnSync(process.execPath, ['bin/veritas-pilot.mjs', 'claim'], {
     cwd: root,
     encoding: 'utf8',
     env: { PATH: process.env.PATH ?? '' },
   });
   assert.equal(result.status, 2);
-  assert.match(result.stderr, /INVALID_REQUEST/);
+  assert.match(result.stderr, /BLOCKED_AUTHORIZATION/);
   assert.doesNotMatch(result.stderr, /NOT_IMPLEMENTED/);
 });

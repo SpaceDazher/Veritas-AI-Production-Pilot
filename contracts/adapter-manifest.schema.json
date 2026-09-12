@@ -18,7 +18,7 @@
     "adapterId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,63}$"},
     "contractVersion": {"const": "1.0.0-draft"},
     "kind": {"type": "string", "enum": ["codex", "pi", "generic-cli"]},
-    "availability": {"type": "string", "enum": ["AVAILABLE_UNVERIFIED", "AUTH_READY_EXECUTION_UNVERIFIED", "TRANSPORT_VERIFIED_TASK_LIFECYCLE_PENDING", "MISSING", "PLANNED", "VERIFIED"]},
+    "availability": {"type": "string", "enum": ["AVAILABLE_UNVERIFIED", "AUTH_READY_EXECUTION_UNVERIFIED", "TRANSPORT_VERIFIED_TASK_LIFECYCLE_PENDING", "TASK_LIFECYCLE_VERIFIED", "MISSING", "PLANNED", "VERIFIED"]},
     "executableVersion": {"type": ["string", "null"]},
     "environmentDigest": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
     "authority": {"const": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY"},

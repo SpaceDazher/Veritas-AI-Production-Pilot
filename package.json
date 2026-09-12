@@ -20,7 +20,8 @@
     "postgres:status": "node scripts/postgres-lifecycle.mjs status",
     "postgres:stop": "node scripts/postgres-lifecycle.mjs stop",
     "postgres:migrate": "node scripts/apply-command-path.mjs",
-    "human:decide": "node bin/veritas-human-decision.mjs"
+    "human:decide": "node bin/veritas-human-decision.mjs",
+    "pilot:finalize": "node scripts/finalize-pilot-closure.mjs"
   },
   "engines": {
     "node": ">=22"

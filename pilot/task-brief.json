@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "S2-001-PILOT-AI-PRODUCTION-001",
   "revision": 1,
-  "status": "READY_FOR_EXECUTION",
+  "status": "DONE_WITH_LIMITS",
   "question": "How can an autonomous but human-governed system take an AI application from zero to a production-candidate release with reproducible decisions and measurable quality, safety, cost, latency and reliability?",
   "targetOutcome": "A minimal adapter and one-job runner exercised by real Codex and pi adapters through IN_REVIEW, followed by a human decision.",
   "dependency": {
@@ -23,9 +23,9 @@
     "agentFinalApprovalAuthorized": false
   },
   "requiredAdapters": ["codex", "pi", "generic-cli"],
-  "workflow": ["BACKLOG", "READY", "CLAIMED", "RUNNING", "IN_REVIEW"],
+  "workflow": ["BACKLOG", "READY", "CLAIMED", "RUNNING", "IN_REVIEW", "DONE"],
   "humanDecisionOwner": "repository-owner",
   "budgetOwner": "repository-owner",
-  "executionAuthorized": true,
+  "executionAuthorized": false,
   "blockers": []
 }

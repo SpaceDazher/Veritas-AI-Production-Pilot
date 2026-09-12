@@ -14,9 +14,10 @@ authentication are verified without emitting credentials or invoking a model.
 Five primary public sources are frozen as tracked SHA-256-bound snapshots;
 local-only inputs are explicitly empty. A bounded, authority-free transport
 smoke has executed successfully through real Codex and Pi processes, with
-separate PIDs and no raw transcripts committed. An idempotent DB-only probe has
-exercised the persistent PostgreSQL command path through `IN_REVIEW`, with six
-linked audit events. The real Codex/Pi task remains open.
+separate PIDs and no raw transcripts committed. The real v2 task then traversed
+the persistent PostgreSQL path through `IN_REVIEW`, with six linked execution
+events. A separate human-only decision extended the chain with a seventh event
+and moved the task to `DONE`; production remained unauthorized.
 
 ## Phase 1 — contract tests
 
@@ -62,3 +63,7 @@ permission expansion, prompt injection, and unknown outcomes.
 Package all evidence and limitations. Only the named human decision owner may
 record `APPROVE`, `REVISE`, or `REJECT`. The result remains research evidence,
 not production deployment authority.
+
+Observed: the repository owner recorded `APPROVE` for scope `solution`, bound
+to submission digest `d3b3e32a90a6f26efc0a654d239feed8fe98d1101a949ad6e572ebea4f0a9048`.
+The canonical disposition is `SOLUTION_APPROVED_PRODUCTION_NOT_AUTHORIZED`.

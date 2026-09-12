@@ -5,12 +5,13 @@ production-candidate evidence pack. The pilot is intentionally fail-closed:
 agents may implement and recommend, while a human owns budget and final
 approval.
 
-Current status: **READY_FOR_EXECUTION**. The local host has Codex `0.153.4`,
-Pi `0.85.1`, Node.js `22.23.2`, and a verified project-local PostgreSQL `17.11`
-database on loopback. Provider authentication/task execution and the exact
-source freeze are verified. A two-process, authority-free transport smoke has
-run through real Codex and Pi CLIs. An idempotent PostgreSQL probe reached
-`IN_REVIEW`; the real Codex/Pi task and production deployment remain unexecuted.
+Current status: **PASS_WITH_LIMITS — SOLUTION_APPROVED_PRODUCTION_NOT_AUTHORIZED**.
+The bounded v2 task ran through real Codex and Pi processes, persisted six
+execution events in the project-local PostgreSQL `17.11` database, stopped at
+`IN_REVIEW`, and was then approved by the named human owner through a separate
+digest-bound path. The task is `DONE` at revision 7. Production deployment was
+not executed or authorized, and subscription CLIs did not expose per-call
+billing telemetry.
 
 ## Implemented reference slice
 
@@ -35,7 +36,9 @@ npm run postgres:stop
 The in-memory engine is a test oracle. State-changing CLI operations now use
 the project-local PostgreSQL command path and repository-local JSON inputs;
 every mutation is revision-, lease-, fence-, capability- and idempotency-bound.
-The real task, evidence pack and human decision are later steps.
+The real task, evidence pack and human decision are recorded. Agent execution
+is disabled after closure; any production deployment requires a new explicit
+authorization and a separate acceptance scope.
 
 `npm run probe:environment` performs bounded `--version` discovery only. It
 does not invoke a model. The first PostgreSQL schema is frozen in
@@ -55,6 +58,10 @@ digests, and refuses to run again after a verified manifest exists.
 `npm run verify:sources` performs an offline size/SHA-256 verification of the
 five tracked primary-source snapshots. The public pilot imports no local-only
 or private source material.
+
+`npm run pilot:run` produced the immutable review input in
+`evidence/pilot-run-manifest.json`. The separately recorded human decision is
+bound to its submission digest in `evidence/pilot-closure-manifest.json`.
 
 The project-local database is deliberately not installed as a Windows service.
 Its lifecycle commands are explicit and idempotent; `probe:environment` remains

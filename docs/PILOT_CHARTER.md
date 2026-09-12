@@ -36,11 +36,11 @@ production-like local result is not a production certification.
 
 ## Current disposition
 
-`READY_FOR_EXECUTION`: Codex, Pi, Node.js and a dedicated loopback-only
-PostgreSQL database are present and version-verified. Codex subscription and Pi
-provider authentication are verified. Five primary public sources are frozen
-as tracked SHA-256-bound snapshots and local-only inputs are explicitly empty.
-A bounded transport smoke ran through both real agent processes without tools
-or authority claims. An idempotent DB-only probe verified the persistent
-PostgreSQL path through `IN_REVIEW`; it did not execute a model. The real
-Codex/Pi task remains unexecuted, so the end-to-end pilot is not yet claimed.
+`PASS_WITH_LIMITS`: Codex and Pi executed the bounded v2 task in separate
+processes, PostgreSQL retained the revision/fence/audit evidence, and the agents
+stopped at `IN_REVIEW`. The repository owner then approved the exact submission
+digest for scope `solution`, moving the task to `DONE`. The result proves the
+minimal pilot lifecycle, not production readiness: no deployment occurred,
+per-call subscription billing telemetry was unavailable, and the human action
+used an operator-mediated local session rather than production identity
+infrastructure.

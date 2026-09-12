@@ -108,4 +108,22 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION pilot_closure_snapshot(p_payload jsonb)
+RETURNS jsonb
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  v_task pilot_task%ROWTYPE;
+BEGIN
+  PERFORM pilot_assert_exact_keys(p_payload, ARRAY['taskId'], 'closure snapshot payload');
+  SELECT * INTO v_task FROM pilot_task WHERE id = p_payload->>'taskId';
+  IF NOT FOUND THEN RAISE EXCEPTION 'TASK_NOT_FOUND'; END IF;
+  RETURN jsonb_build_object(
+    'task', to_jsonb(v_task),
+    'events', coalesce((SELECT jsonb_agg(to_jsonb(e) ORDER BY e.sequence) FROM audit_event e WHERE e.task_id = v_task.id), '[]'::jsonb),
+    'decisions', coalesce((SELECT jsonb_agg(to_jsonb(d) ORDER BY d.recorded_at) FROM human_decision d WHERE d.task_id = v_task.id), '[]'::jsonb)
+  );
+END;
+$$;
+
 COMMIT;

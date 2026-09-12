@@ -19,7 +19,7 @@ const ARGUMENT_FIELDS = {
   fail: new Set(['idempotencyKey', 'leaseId', 'fencingToken', 'reason']),
   cancel: new Set(['idempotencyKey', 'leaseId', 'fencingToken', 'reason']),
 };
-const DATABASE_FUNCTIONS = new Set(['pilot_seed_task', 'pilot_mark_ready', 'pilot_dispatch', 'pilot_task_snapshot', 'pilot_record_human_decision']);
+const DATABASE_FUNCTIONS = new Set(['pilot_seed_task', 'pilot_mark_ready', 'pilot_dispatch', 'pilot_task_snapshot', 'pilot_record_human_decision', 'pilot_closure_snapshot']);
 const HUMAN_DECISION_FIELDS = new Set(['schemaVersion', 'decisionId', 'taskId', 'taskRevision', 'actorId', 'decision', 'decisionScope', 'artifactDigest', 'reason']);
 
 const exactObject = (value, fields, name) => {
@@ -110,3 +110,4 @@ export const seedPersistentTask = (payload, options) => callPostgresFunction('pi
 export const markPersistentTaskReady = (payload, options) => callPostgresFunction('pilot_mark_ready', payload, options);
 export const getPersistentTaskSnapshot = (taskId, options) => callPostgresFunction('pilot_task_snapshot', { taskId }, options);
 export const recordPersistentHumanDecision = (decision, options) => callPostgresFunction('pilot_record_human_decision', validateHumanDecision(decision), options);
+export const getPersistentClosureSnapshot = (taskId, options) => callPostgresFunction('pilot_closure_snapshot', { taskId }, options);
