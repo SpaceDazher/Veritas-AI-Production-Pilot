@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "adapterId": "pi-local",
+  "contractVersion": "1.0.0-draft",
+  "kind": "pi",
+  "availability": "TASK_LIFECYCLE_VERIFIED",
+  "executableVersion": "0.85.1",
+  "environmentDigest": "d3d096b549b4d739dcddfa6d8e1cab8793f22262cd1f22d4751434b875a33a16",
+  "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
+  "operations": ["discover", "claim", "start", "heartbeat", "checkpoint", "submit-for-review", "fail", "cancel"],
+  "authBinding": {"status": "ready", "provider": "zai-coding-cn", "authType": "api_key", "manifest": "evidence/agent-auth-manifest.json"},
+  "executionBinding": {"status": "verified", "manifest": "evidence/agent-execution-manifest.json", "digest": "634940c3321b3e0d51eaefc3f55c0e57250da53560a34a5ad57020c962b878f4"},
+  "blocker": null
+}

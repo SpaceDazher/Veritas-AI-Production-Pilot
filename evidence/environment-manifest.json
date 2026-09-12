@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "decisionInput": true,
+  "hostClass": "win32-x64-local-development",
+  "node": {"available": true, "version": "22.23.2"},
+  "codex": {"available": true, "version": "codex-cli 0.153.4", "versionVerified": true},
+  "pi": {"available": true, "version": "0.85.1", "versionVerified": true},
+  "docker": {"available": false, "version": null, "versionVerified": false},
+  "psql": {"available": true, "version": "psql (PostgreSQL) 17.11", "versionVerified": true},
+  "dedicatedPostgresql": {
+    "available": true,
+    "verified": true,
+    "serverVersion": "17.11",
+    "database": "veritas_pilot",
+    "applicationRole": "veritas_app",
+    "publicTableCount": 8,
+    "migrationSha256": "020ea66c831d9002477a8c360d8d2f8be3cb156a2d66f0cd89a5117ad014cf27"
+  },
+  "paidApiBudgetUsd": 0,
+  "environmentDigest": "8361bf276f0bc879e04939c2461658a56ad062723c49e007ac617c0207209850",
+  "missingPrerequisites": [],
+  "verdict": "READY_FOR_AUTHORIZATION"
+}

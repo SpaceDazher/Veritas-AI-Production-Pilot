@@ -1,0 +1,29 @@
+{
+  "name": "veritas-ai-production-pilot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/validate-pilot.mjs && node --test tests/*.test.mjs",
+    "verify": "npm test",
+    "discovery": "node bin/veritas-pilot.mjs discover",
+    "probe:environment": "node scripts/probe-environment.mjs",
+    "probe:auth": "node scripts/probe-agent-auth.mjs",
+    "probe:execution": "node scripts/probe-agent-execution.mjs --execute",
+    "probe:postgres-command": "node scripts/probe-persistent-command-path.mjs",
+    "pilot:run": "node scripts/run-real-pilot.mjs --execute",
+    "pilot:finalize-failed-v1": "node scripts/finalize-failed-pilot-attempt.mjs",
+    "freeze:sources": "node scripts/freeze-sources.mjs --refresh",
+    "verify:sources": "node scripts/freeze-sources.mjs",
+    "provision:postgres": "node scripts/provision-local-postgres.mjs",
+    "postgres:start": "node scripts/postgres-lifecycle.mjs start",
+    "postgres:status": "node scripts/postgres-lifecycle.mjs status",
+    "postgres:stop": "node scripts/postgres-lifecycle.mjs stop",
+    "postgres:migrate": "node scripts/apply-command-path.mjs",
+    "human:decide": "node bin/veritas-human-decision.mjs",
+    "pilot:finalize": "node scripts/finalize-pilot-closure.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

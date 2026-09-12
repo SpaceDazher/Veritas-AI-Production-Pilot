@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "decisionInput": true,
+  "bindings": {
+    "codex": {
+      "processId": 26076,
+      "provider": "openai-codex",
+      "model": "gpt-5.6-sol",
+      "exitStatus": 0,
+      "workingDirectory": ".local/adapter-smoke/codex",
+      "stdoutSha256": "e2e0e750ac3b235aa457c0d8f54fad88f3a3df88c56e407b1711e237a5499ae1",
+      "stderrSha256": "b17f1e6fe57750adc6f1cd221f4c74d871ec383576541e166e2c4f2e2b7c6af3",
+      "result": {
+        "schemaVersion": 1,
+        "adapter": "codex",
+        "nonce": "codex-smoke-v1",
+        "status": "OK",
+        "authorityClaims": []
+      },
+      "resultSha256": "beb17f38497afbd9d551964db5832c15427911b69cb8bd8bdfcc8bfd91160769"
+    },
+    "pi": {
+      "processId": 4784,
+      "provider": "zai-coding-cn",
+      "model": "glm-5.3-flash",
+      "exitStatus": 0,
+      "workingDirectory": ".local/adapter-smoke/pi",
+      "stdoutSha256": "c39b710acc2c7af8b2973e563c6640fa3f25bb3ef4ee055d9f207225731e01d8",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "result": {
+        "schemaVersion": 1,
+        "adapter": "pi",
+        "nonce": "pi-smoke-v1",
+        "status": "OK",
+        "authorityClaims": []
+      },
+      "resultSha256": "c50488b3924cd33c8f2f6d58e03fa7e3a7a9c528f27e1c9951fcca8ba6dfc073"
+    }
+  },
+  "processSeparated": true,
+  "workingDirectoriesIsolated": true,
+  "priorUnacceptedAttempts": {
+    "codexSchemaRejectedBeforeInference": 4,
+    "piUnpairedModelCalls": 1
+  },
+  "modelCallsExecuted": 2,
+  "totalObservedModelInferenceCalls": 3,
+  "toolsAuthorized": false,
+  "productionActionsAuthorized": false,
+  "incrementalPaidApiBudgetAuthorizedUsd": 0,
+  "accessClasses": [
+    "chatgpt-subscription",
+    "zai-coding-plan-china"
+  ],
+  "rawTranscriptsCommitted": false,
+  "verdict": "EXECUTION_BINDINGS_VERIFIED",
+  "executionBindingDigest": "634940c3321b3e0d51eaefc3f55c0e57250da53560a34a5ad57020c962b878f4"
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SpaceDazher/Veritas-AI-Production-Pilot/contracts/adapter-smoke-result.schema.json",
+  "title": "Adapter smoke result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "adapter", "nonce", "status", "authorityClaims"],
+  "properties": {
+    "schemaVersion": {"type": "integer", "const": 1},
+    "adapter": {"type": "string", "enum": ["codex", "pi"]},
+    "nonce": {"type": "string", "enum": ["codex-smoke-v1", "pi-smoke-v1"]},
+    "status": {"type": "string", "const": "OK"},
+    "authorityClaims": {"type": "array", "items": {"type": "string"}, "maxItems": 0}
+  }
+}

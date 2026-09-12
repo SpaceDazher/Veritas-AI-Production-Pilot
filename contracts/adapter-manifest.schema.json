@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veritas.local/contracts/adapter-manifest.schema.json",
+  "title": "Veritas agent adapter manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "adapterId",
+    "contractVersion",
+    "kind",
+    "availability",
+    "authority",
+    "operations"
+  ],
+  "properties": {
+    "schemaVersion": {"type": "integer", "const": 1},
+    "adapterId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,63}$"},
+    "contractVersion": {"const": "1.0.0-draft"},
+    "kind": {"type": "string", "enum": ["codex", "pi", "generic-cli"]},
+    "availability": {"type": "string", "enum": ["AVAILABLE_UNVERIFIED", "AUTH_READY_EXECUTION_UNVERIFIED", "TRANSPORT_VERIFIED_TASK_LIFECYCLE_PENDING", "TASK_LIFECYCLE_VERIFIED", "MISSING", "PLANNED", "VERIFIED"]},
+    "executableVersion": {"type": ["string", "null"]},
+    "environmentDigest": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+    "authority": {"const": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY"},
+    "operations": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": ["discover", "claim", "start", "heartbeat", "checkpoint", "submit-for-review", "fail", "cancel"]
+      }
+    },
+    "authBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "manifest"],
+      "properties": {
+        "status": {"type": "string", "const": "ready"},
+        "provider": {"type": "string"},
+        "authType": {"type": "string"},
+        "authMode": {"type": "string"},
+        "manifest": {"type": "string", "const": "evidence/agent-auth-manifest.json"}
+      }
+    },
+    "executionBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "manifest", "digest"],
+      "properties": {
+        "status": {"type": "string", "const": "verified"},
+        "manifest": {"type": "string", "const": "evidence/agent-execution-manifest.json"},
+        "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "blocker": {"type": ["string", "null"]}
+  }
+}

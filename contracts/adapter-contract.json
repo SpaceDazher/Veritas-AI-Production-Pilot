@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "contractId": "veritas.agent-adapter",
+  "contractVersion": "1.0.0-draft",
+  "status": "FROZEN_FOR_PREREQUISITES",
+  "authority": "This contract permits task execution only. It never grants budget, permission expansion, production deployment, or final approval.",
+  "states": [
+    "BACKLOG",
+    "READY",
+    "CLAIMED",
+    "RUNNING",
+    "BLOCKED",
+    "IN_REVIEW",
+    "DONE",
+    "FAILED",
+    "CANCELLED"
+  ],
+  "agentWritableStates": [
+    "CLAIMED",
+    "RUNNING",
+    "BLOCKED",
+    "IN_REVIEW",
+    "FAILED",
+    "CANCELLED"
+  ],
+  "humanOnlyStates": ["DONE"],
+  "operations": [
+    "discover",
+    "claim",
+    "start",
+    "heartbeat",
+    "checkpoint",
+    "submit-for-review",
+    "fail",
+    "cancel"
+  ],
+  "requiredRequestFields": [
+    "contractVersion",
+    "operationId",
+    "actorId",
+    "taskId",
+    "expectedRevision"
+  ],
+  "sideEffectFields": ["idempotencyKey", "leaseId", "fencingToken"],
+  "errors": [
+    "INVALID_REQUEST",
+    "UNSUPPORTED_OPERATION",
+    "INVALID_TRANSITION",
+    "TASK_NOT_FOUND",
+    "CAPABILITY_DENIED",
+    "STALE_REVISION",
+    "LEASE_REQUIRED",
+    "LEASE_EXPIRED",
+    "STALE_FENCE",
+    "ACTIVE_JOB_EXISTS",
+    "IDEMPOTENCY_CONFLICT",
+    "BUDGET_DENIED",
+    "HUMAN_APPROVAL_REQUIRED",
+    "ARTIFACTS_REQUIRED",
+    "ARTIFACT_BINDING_MISMATCH",
+    "CHECKS_REQUIRED",
+    "CHECK_FAILED",
+    "UNKNOWN_OUTCOME_RECONCILIATION_REQUIRED"
+  ],
+  "limits": {
+    "maxConcurrentJobs": 1,
+    "paidApiBudgetUsd": 0,
+    "finalApprovalByAgent": false
+  }
+}

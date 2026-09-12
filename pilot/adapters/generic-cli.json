@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "adapterId": "veritas-generic-cli",
+  "contractVersion": "1.0.0-draft",
+  "kind": "generic-cli",
+  "availability": "VERIFIED",
+  "executableVersion": "0.1.0",
+  "environmentDigest": "d3d096b549b4d739dcddfa6d8e1cab8793f22262cd1f22d4751434b875a33a16",
+  "authority": "IMPLEMENT_AND_SUBMIT_FOR_REVIEW_ONLY",
+  "operations": ["discover", "claim", "start", "heartbeat", "checkpoint", "submit-for-review", "fail", "cancel"],
+  "blocker": null
+}

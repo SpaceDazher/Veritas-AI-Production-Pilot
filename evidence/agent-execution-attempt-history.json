@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "scope": "known attempts before the first accepted Codex/Pi binding pair",
+  "codexSchemaRejectedBeforeInference": 4,
+  "piUnpairedModelCalls": 1,
+  "rawTranscriptsCommitted": false,
+  "notes": [
+    "The four Codex requests were rejected by the provider before inference because the strict JSON schema was incomplete.",
+    "The Pi call completed before the first probe implementation was changed to fail fast on a rejected Codex request.",
+    "This record prevents the final accepted-pair manifest from understating observed execution attempts."
+  ]
+}
