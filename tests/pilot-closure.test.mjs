@@ -5,6 +5,7 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import { buildPilotClosureManifest, verifyPilotClosureDigest } from '../src/pilot-closure.mjs';
+import { canonicalHash } from '../src/canonical.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const run = JSON.parse(readFileSync(path.join(root, 'evidence', 'pilot-run-manifest.json'), 'utf8'));
@@ -59,4 +60,19 @@ test('tracked closure manifest verifies and preserves the production boundary', 
   assert.equal(closure.decision.scope, 'solution');
   assert.equal(closure.productionDeploymentAuthorized, false);
   assert.equal(closure.productionDeployed, false);
+});
+
+test('tracked clean-checkout evidence is digest-bound and proves the frozen pilot verdict', () => {
+  const evidence = JSON.parse(readFileSync(path.join(root, 'evidence', 'clean-checkout.json'), 'utf8'));
+  const { evidenceDigest, ...digestInput } = evidence;
+  assert.equal(canonicalHash(digestInput), evidenceDigest);
+  assert.equal(evidence.commitSha, 'cfdf7113b7ef9ac9347647de4a68edef39185b5c');
+  assert.equal(evidence.treeSha, '828202bffed719b6534ac7601ea60a8217db5271');
+  assert.equal(evidence.method, 'git archive --format=zip HEAD followed by isolated extraction');
+  assert.equal(evidence.command, 'npm test');
+  assert.equal(evidence.exitCode, 0);
+  assert.equal(evidence.testsPassed, 53);
+  assert.equal(evidence.verdict, 'PASS_PILOT_COMPLETE_WITH_LIMITS');
+  assert.equal(evidence.sourceSnapshotHashesVerified, true);
+  assert.equal(evidence.pilotEvidenceHashesVerified, true);
 });
